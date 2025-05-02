@@ -21,7 +21,9 @@ for index, linha in tabela.iterrows():
     documento.add_paragraph(texto.strip(" | "))
 
 # Salva o documento Word
-documento.save("planilha_convertida.docx")
+documento.save(r"C:\Users\joaorocha\Desktop\Py\Learning\Converter\Novo(a) Documento do Microsoft Word.docx")
+
+
 
 
 
