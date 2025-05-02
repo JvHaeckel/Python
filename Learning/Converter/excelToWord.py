@@ -2,7 +2,6 @@
 
 import pandas as pd
 from docx import Document
-import tkinter as tk
 
 caminho = (r"C:\Users\joaorocha\Desktop\Py\Learning\Converter\Informações.xlsx")
 
@@ -25,10 +24,5 @@ for index, linha in tabela.iterrows():  # Esse comando itera (passa por) cada li
 # Salvar o documento Word com o nome escolhido pela pessoa 
 name = input("Qual o nome do arquivo? ")
 documento.save(fr"C:\Users\joaorocha\Desktop\Py\Learning\Converter\{name}.docx")
-
-
-# Criando janela
-janela = tk.Tk()
-janela.title("Conversor Excel → Word")
 
 
