@@ -22,6 +22,7 @@ dia = input("Digite o dia:  ")
 mes = input("Digite o mês: ")
 ano = 2025
 
+# Dicionário
 referencias = {
     "XXXX" : nome,
     "YYYY" : item1,
