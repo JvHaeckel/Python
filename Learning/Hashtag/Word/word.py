@@ -1,5 +1,7 @@
 # Integração do Python com Word - Como Criar Contratos Automaticamente
 #https://www.youtube.com/watch?v=N01MPYL3UVY
+# Até aqui conseguimos alterar os dados de um documento do Word (23:30)
+
 
 from docx import Document
 documento = Document(r"Learning\Hashtag\Word\Contrato.docx")
@@ -46,11 +48,3 @@ for paragrafo in documento.paragraphs:
                 run.text = run.text.replace(codigo, valor)
 
 documento.save('Contrato de ' + name + " .docx")
-
-
-
-# Até aqui conseguimos alterar os dados de um documento do Word (23:30)
-
-
-
-
