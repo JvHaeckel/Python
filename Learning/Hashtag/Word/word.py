@@ -1,4 +1,6 @@
 # Integração do Python com Word - Como Criar Contratos Automaticamente
+# Vamos alterar os dados de um documento Word usando uma planilha em Excel
+
 #https://www.youtube.com/watch?v=N01MPYL3UVY
 # Até aqui conseguimos alterar os dados de um documento do Word (23:30)
 
