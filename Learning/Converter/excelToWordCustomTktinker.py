@@ -7,7 +7,6 @@ from tkinter import filedialog
 # Configurando as cores padrões
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")  # ou "green", "dark-blue", etc.
-
 janela = ctk.CTk()
 janela.configure(fg_color="lightblue")  # muda a cor do fundo
 
@@ -60,7 +59,7 @@ def converter():
         nome_arquivo = "documento_word"
         
     documento.save(f"{nome_arquivo}.docx")
-
+    
 
 #  *****   Campos na janela  *****
 
@@ -84,11 +83,10 @@ titulo2.pack(pady=(15,5))
 # Campo 2
 campo2 = ctk.CTkEntry(janela, width=250, placeholder_text="Digite aqui ")
 campo2.pack(pady=(0,15))
- 
 
 # Botão para converter
 botao = ctk.CTkButton(janela, text="Converter", width=80, height=25, command=converter) # command - chama a função acima
 botao.pack(pady=(15,7.5))
 
-# Inicia a janela
+# Ele faz com que a janela fique aberta, escutando e respondendo a eventos do usuário
 janela.mainloop()
