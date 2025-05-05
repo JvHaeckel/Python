@@ -4,6 +4,14 @@ from docx import Document
 import customtkinter as ctk
 from tkinter import filedialog
 
+# Configurando as cores padrões
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")  # ou "green", "dark-blue", etc.
+
+janela = ctk.CTk()
+janela.configure(fg_color="lightblue")  # muda a cor do fundo
+
+
 # Função que converte Excel em Word
 def converter():
     # Aqui está sendo usada a biblioteca tkinter para abrir uma janela de diálogo para que o usuário escolha um arquivo no computador. 
@@ -58,29 +66,29 @@ def converter():
 
 # Criando janela
 janela = ctk.CTk()                          # Esse T sempre maiúsculo
-janela.geometry("350x200")                # Vai dar o tamanho da caixa
+janela.geometry("300x225")                # Vai dar o tamanho da caixa
 janela.title("Conversor Excel → Word ")   # Título da caixa
 
 # Texto do  campo 1
-titulo1 = ctk.CTkLabeltkLabel(janela, text = "Digite o Título do documento:")
-titulo1.pack()
+titulo1 = ctk.CTkLabel(janela, text = "Digite o Título do documento:")
+titulo1.pack(pady=(5,5))
 
 # Campo 1
-campo1 = ctk.CTkEntry(janela, width=40)
-campo1.pack(pady=(20,10))
+campo1 = ctk.CTkEntry(janela, width=250 , placeholder_text="Digite aqui ")
+campo1.pack(pady=(0,5))
 
 # Texto do Campo 2
 titulo2 = ctk.CTkLabel(janela , text="Digite o nome do arquivo Word:")
-titulo2.pack(pady=(20,10))
+titulo2.pack(pady=(15,5))
 
 # Campo 2
-campo2 = ctk.CTkEntry(janela, width=40)
-campo2.pack()
+campo2 = ctk.CTkEntry(janela, width=250, placeholder_text="Digite aqui ")
+campo2.pack(pady=(0,15))
  
 
 # Botão para converter
-botao = ctk.CTkButton(janela, text="Selecionar e Converter", command=converter) # command - chama a função acima
-botao.pack(pady=20)
+botao = ctk.CTkButton(janela, text="Converter", width=80, height=25, command=converter) # command - chama a função acima
+botao.pack(pady=(15,7.5))
 
 # Inicia a janela
 janela.mainloop()
