@@ -81,5 +81,5 @@ campo2.pack()
 botao = tk.Button(janela, text="Selecionar e Converter", command=converter) # command - chama a função acima
 botao.pack(pady=20)
 
-# Inicia a janela
+# Mantém a Janela Aberta para acrescentar os Inputs
 janela.mainloop()

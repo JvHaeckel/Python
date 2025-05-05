@@ -2,7 +2,10 @@ from openpyxl import load_workbook
 import pandas as pd
 
 # Caminho para o arquivo Excel
-arquivo = r"C:\Users\joaorocha\Desktop\Py\Projeto Avos - Completo.xlsm"
+arquivo = (r"C:\Users\joaorocha\Desktop\Py\PLR\Projeto Avos - Completo.xlsm")
+
+# Ler o arquivo
+# tabela = pd.read_excel(arquivo)
 
 # Nome das abas
 aba_base = "Base"
@@ -24,7 +27,7 @@ dict_avos = {}
 # Exemplo de leitura de dados e cálculo de avôs trabalhados
 # Lógica de cálculo dos avôs trabalhados
 for i, row in base.iterrows():
-    matricula = str(row['Matrícula']).strip()
+    chapa = str(row['Matrícula']).strip()
     data_admissao = row['Admissão']
     afastamento = row['Afastamento']
     retorno = row['Retorno']
@@ -57,14 +60,14 @@ for i, row in base.iterrows():
 
     # Salvar o cálculo de avôs na planilha Base
     base.at[i, 'Avos Trabalhados'] = avos_trabalhados
-    dict_avos[matricula] = avos_trabalhados
+    dict_avos[chapa] = avos_trabalhados
 
 # Preencher os dados na aba Geral
 for i, row in geral.iterrows():
-    matricula_geral = str(row['Matrícula']).strip()
+    chapa_geral = str(row['Matrícula']).strip()
 
-    if matricula_geral in dict_avos:
-        geral.at[i, 'Avos'] = dict_avos[matricula_geral]
+    if chapa_geral in dict_avos:
+        geral.at[i, 'Avos'] = dict_avos[chapa_geral]
     else:
         # Calcular avôs se não existir na base
         data_admissao_geral = row['Admissão']
@@ -92,7 +95,9 @@ for i, row in geral.iterrows():
             geral.at[i, 'Avos'] = avos_geral_calculados
 
 # Salvar as alterações de volta nas planilhas
-base.to_excel(arquivo, sheet_name=aba_base, index=False)
-geral.to_excel(arquivo, sheet_name=aba_geral, index=False)
-
+with pd.ExcelWriter(arquivo, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+    writer.book = load_workbook(arquivo, keep_vba=True)
+    writer.sheets = {ws.title: ws for ws in writer.book.worksheets}
+    base.to_excel(writer, sheet_name=aba_base, index=False)
+    geral.to_excel(writer, sheet_name=aba_geral, index=False)
 print('Cálculo de avôs finalizado com sucesso!')
