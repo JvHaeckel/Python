@@ -27,7 +27,7 @@ dict_avos = {}
 # Exemplo de leitura de dados e cálculo de avôs trabalhados
 # Lógica de cálculo dos avôs trabalhados
 for i, row in base.iterrows():
-    chapa = str(row['Matrícula']).strip()
+    chapa = str(row['Chapa']).strip()
     data_admissao = row['Admissão']
     afastamento = row['Afastamento']
     retorno = row['Retorno']
@@ -64,7 +64,7 @@ for i, row in base.iterrows():
 
 # Preencher os dados na aba Geral
 for i, row in geral.iterrows():
-    chapa_geral = str(row['Matrícula']).strip()
+    chapa_geral = str(row['Chapa']).strip()
 
     if chapa_geral in dict_avos:
         geral.at[i, 'Avos'] = dict_avos[chapa_geral]
