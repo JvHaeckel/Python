@@ -5,13 +5,21 @@ from tkinter import filedialog
 
 # Função que converte Excel em Word
 def converter():
-    # Seleciona o arquivo Excel
+    # Aqui está sendo usada a biblioteca tkinter para abrir uma janela de diálogo para que o usuário escolha um arquivo no computador. 
+    # filedialog.askopenfilename():Esse método abre uma janela para o usuário selecionar um arquivo e retorna o caminho completo do 
+    # arquivo escolhido. 
+    # 
+    # filetypes=[("Excel files", "*.xlsx")]:Especifica que a janela de diálogo deve filtrar e mostrar apenas arquivos com extensão 
+    # .xlsx, ou seja, apensa arquivos em Excel
+    
+    
+    
     arquivo_excel = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
     
     if not arquivo_excel:
         return
     
-    # Lê a planilha
+    # Lê a planilha usando Pandas
     tabela = pd.read_excel(arquivo_excel)
 
     # Cria o documento Word
