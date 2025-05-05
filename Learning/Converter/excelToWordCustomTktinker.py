@@ -1,6 +1,7 @@
 import pandas as pd
 from docx import Document
-import tkinter as tk    
+# import tkinter as tk    Embaixo usamos ele mais bonito
+import customtkinter as ctk
 from tkinter import filedialog
 
 # Função que converte Excel em Word
@@ -56,29 +57,29 @@ def converter():
 #  *****   Campos na janela  *****
 
 # Criando janela
-janela = tk.Tk()                          # Esse T sempre maiúsculo
+janela = ctk.CTk()                          # Esse T sempre maiúsculo
 janela.geometry("350x200")                # Vai dar o tamanho da caixa
 janela.title("Conversor Excel → Word ")   # Título da caixa
 
 # Texto do  campo 1
-titulo1 = tk.Label(janela, text = "Digite o Título do documento:")
+titulo1 = ctk.CTkLabeltkLabel(janela, text = "Digite o Título do documento:")
 titulo1.pack()
 
 # Campo 1
-campo1 = tk.Entry(janela, width=40)
+campo1 = ctk.CTkEntry(janela, width=40)
 campo1.pack(pady=(20,10))
 
 # Texto do Campo 2
-titulo2 = tk.Label(janela , text="Digite o nome do arquivo Word:")
+titulo2 = ctk.CTkLabel(janela , text="Digite o nome do arquivo Word:")
 titulo2.pack(pady=(20,10))
 
 # Campo 2
-campo2 = tk.Entry(janela, width=40)
+campo2 = ctk.CTkEntry(janela, width=40)
 campo2.pack()
  
 
 # Botão para converter
-botao = tk.Button(janela, text="Selecionar e Converter", command=converter) # command - chama a função acima
+botao = ctk.CTkButton(janela, text="Selecionar e Converter", command=converter) # command - chama a função acima
 botao.pack(pady=20)
 
 # Inicia a janela
