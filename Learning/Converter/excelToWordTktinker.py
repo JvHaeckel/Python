@@ -25,7 +25,20 @@ def converter():
     # Cria o documento Word
     documento = Document()
     
+    
+# Acessa o valor inserido pelo usuário em um campo de texto da interface gráfica (feito com o tkinter).
+
+# campo_titulo é um campo de entrada de texto (como uma caixa de texto) criado na interface do programa.
+#.get() - método que obtém o texto  digitado pelo usuário nesse campo, e o armazena na variável titulo.
     titulo = campo_titulo.get()
+    
+# Adiciona um título ao documento Word.
+
+# add_heading() é um método da biblioteca python-docx que permite adicionar títulos de diferentes níveis (semelhante aos 
+# títulos em um processador de texto como o Word).
+
+# titulo - é o texto que será usado como título, que foi obtido na linha anterior a partir do campo de entrada.
+# level=1- Define o nível do título. No Word, o nível 1 corresponde ao título mais importante.
     documento.add_heading(titulo, level=1)
 
     for _, linha in tabela.iterrows():
