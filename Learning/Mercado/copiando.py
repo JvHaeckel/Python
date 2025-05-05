@@ -1,3 +1,7 @@
+# Calcular os avos para o ano de 2025 para a tabela base da planilha: PLR
+
+
+
 import pandas as pd
 from openpyxl import load_workbook
 
