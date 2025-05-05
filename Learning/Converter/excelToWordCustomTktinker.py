@@ -4,14 +4,14 @@ from docx import Document
 import customtkinter as ctk
 from tkinter import filedialog
 
-# Configurando as cores padrões
+# ****** Configurando as cores padrões ******
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")  # ou "green", "dark-blue", etc.
 janela = ctk.CTk()
 janela.configure(fg_color="lightblue")  # muda a cor do fundo
 
 
-# Função que converte Excel em Word
+# ****** Função que converte Excel em Word ******
 def converter():
     # Aqui está sendo usada a biblioteca tkinter para abrir uma janela de diálogo para que o usuário escolha um arquivo no computador. 
     # filedialog.askopenfilename():Esse método abre uma janela para o usuário selecionar um arquivo e retorna o caminho completo do 
@@ -35,9 +35,9 @@ def converter():
 
 # campo_titulo é um campo de entrada de texto (como uma caixa de texto) criado na interface do programa.
 #.get() - método que obtém o texto  digitado pelo usuário nesse campo, e o armazena na variável titulo.
-    titulo = titulo1.get()
+    titulo = campo1.get()
     
-# Adiciona um título ao documento Word.
+# ******  Adiciona Título ao documento Word.  ******
 
 # add_heading() é um método da biblioteca python-docx que permite adicionar títulos de diferentes níveis (semelhante aos 
 # títulos em um processador de texto como o Word).
@@ -54,14 +54,14 @@ def converter():
         documento.add_paragraph("")  # Linha em branco entre os itens
 
     # Salvar com nome digitado
-    nome_arquivo = titulo2.get()
+    nome_arquivo = campo2.get()
     if nome_arquivo.strip() == "":
         nome_arquivo = "documento_word"
         
     documento.save(f"{nome_arquivo}.docx")
     
 
-#  *****   Campos na janela  *****
+#  ******    Campos na janela  ******
 
 # Criando janela
 janela = ctk.CTk()                          # Esse T sempre maiúsculo
