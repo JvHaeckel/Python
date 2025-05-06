@@ -29,7 +29,7 @@ def converter():
 #.get() - método que obtém o texto  digitado pelo usuário nesse campo, e o armazena na variável titulo.
     titulo = titulo1.get()
     
-# Adiciona um título ao documento Word.
+# ***** Adiciona um título ao documento Word *****
 
 # add_heading() é um método da biblioteca python-docx que permite adicionar títulos de diferentes níveis (semelhante aos 
 # títulos em um processador de texto como o Word).
@@ -75,7 +75,6 @@ titulo2.pack(pady=(20,10))
 # Campo 2
 campo2 = tk.Entry(janela, width=40)
 campo2.pack()
- 
 
 # Botão para converter
 botao = tk.Button(janela, text="Selecionar e Converter", command=converter) # command - chama a função acima
