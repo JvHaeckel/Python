@@ -16,11 +16,11 @@ table = pd.read_excel(arquivo, sheet_name="Base" )
 # ***** Convertendo datas *****
 table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors= 'coerce')
 table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors= 'coerce')
+table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
 
 # Filtra o DataFrame table para manter apenas as linhas em que a Data Desligamento seja do ano de 2025.
 table_2025 = table[table["Afastamento"].dt.year == 2025].copy()
 #  Você deve forçar a criação de uma cópia ao criar table_2025 elimina o warning e te garante que está trabalhando em uma cópia segura.
-
 
 # Verificando se o filtro funcionou
 # print(table_2025[["Afastamento","Ultimo dia Ativo"]]) OK
@@ -51,12 +51,17 @@ for i, row in table_2025.iterrows():
 
         table_2025.at[i, "Avos 2025"] = meses
 
+# Calcular o número de dias Afastados
+if table_2025["Retor."] == 0:
+    table_2025["Dias"] = table_2025["Afastamento"] - table_2025["Ultimo dia Ativo"]
+else:
+    table_2025["Dias"] = table_2025["Retor."] - table_2025["Ultimo dia Ativo"]
+
 # Exibe os resultados
-print(table_2025[["Nome","Afastamento", "Ultimo dia Ativo", "Avos 2025"]])
+print(table_2025[["Nome","Afastamento", "Ultimo dia Ativo", "Avos 2025", "Dias"]])
 
 # Salva o resultado em uma nova planilha Excel
 saida = r"C:\Users\joaorocha\Desktop\Py\PLR\Resultado_Avos_2025.xlsx"
 table_2025.to_excel(saida, index=False)
 
-print("Arquivo exportado com sucesso para:")
-print(saida)
+print(f"Arquivo exportado com sucesso para: {saida}")
