@@ -9,7 +9,6 @@ arquivo = (r"C:\Users\joaorocha\Desktop\Py\PLR\Projeto Avos - Completo.xlsm")
 # Faz a leitura do excel usando o Pandas e já escolhe a planilha que será feita as contas no caso foi a Base
 table = pd.read_excel(arquivo, sheet_name="Base" )
 
-
 # Ao imprimir percebi que ele não lê as datas assim teremos que converter
 # print(table)
 
@@ -18,7 +17,7 @@ table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors= 'coerce')
 table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors= 'coerce')
 table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
 
-# Filtra o DataFrame table para manter apenas as linhas em que a Data Desligamento seja do ano de 2025.
+# Filtra o DataFrame table para manter apenas as linhas em que a Data Afastamento seja do ano de 2025.
 table_2025 = table[table["Afastamento"].dt.year == 2025].copy()
 #  Você deve forçar a criação de uma cópia ao criar table_2025 elimina o warning e te garante que está trabalhando em uma cópia segura.
 
@@ -52,16 +51,40 @@ for i, row in table_2025.iterrows():
         table_2025.at[i, "Avos 2025"] = meses
 
 # Calcular o número de dias Afastados
-if table_2025["Retor."] == 0:
-    table_2025["Dias"] = table_2025["Afastamento"] - table_2025["Ultimo dia Ativo"]
-else:
-    table_2025["Dias"] = table_2025["Retor."] - table_2025["Ultimo dia Ativo"]
+dias_afastados = []
 
+for i, row in table_2025.iterrows():
+    
+  if pd.isna (row["Retor."]):
+   dias =  (row["Afastamento"] - row["Ultimo dia Ativo"]).days
+  else:
+   dias = (row["Retor."] - row["Ultimo dia Ativo"]).days
+  dias_afastados.append(dias)
+
+table_2025["Dias"] = dias_afastados
 # Exibe os resultados
-print(table_2025[["Nome","Afastamento", "Ultimo dia Ativo", "Avos 2025", "Dias"]])
+
+
+exibir = [
+    "Chapa",
+    "Divisões",
+    "Nome",	
+    "Função",	
+    "Admis." ,
+    "Ultimo dia Ativo",
+    "Afastamento",
+    "Cid",
+    "Retor." ,
+    "Dias" 	,
+    "Motivo",
+    "Avos 2025"	
+]
+# Para não sobrescrever o table_2025 com uma lista de strings, o que quebra o .to_excel() criamos outra variável chamada resultado
+resultado = table_2025[exibir]
+print(resultado)
 
 # Salva o resultado em uma nova planilha Excel
 saida = r"C:\Users\joaorocha\Desktop\Py\PLR\Resultado_Avos_2025.xlsx"
-table_2025.to_excel(saida, index=False)
+resultado.to_excel(saida, index=False)
 
 print(f"Arquivo exportado com sucesso para: {saida}")
