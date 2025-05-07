@@ -3,6 +3,7 @@
 # que o filtro apenas considerou 
 
 import pandas as pd
+from datetime import datetime
 
 # Aqui pegou o caminho do arquivo
 arquivo = (r"C:\Users\joaorocha\Desktop\Py\PLR\Projeto Avos - Completo.xlsm")
@@ -31,39 +32,82 @@ table_2025 = table[(table["Afastamento"].dt.year == 2025) |
 # Criando nova coluna chamada Avos e atribuindo a ela um valor zerado inicial
 table_2025 ["Avos"] = 0 
 
+# ***********************************************************************************
+
 # Laço simples para calcular os avos
+
+# Data atual
+hoje = pd.Timestamp.today()
+
 for i, row in table_2025.iterrows():
-    data_final = row["Afastamento"]
+    ultimo_ativo = row["Ultimo dia Ativo"]
+    afastamento = row["Afastamento"]
+    retorno = row["Retor."]
 
-    # Garante que a data final esteja dentro de 2025
-    if pd.notna(data_final):
-        if data_final > pd.Timestamp("2025-12-31"):
-            data_final = pd.Timestamp("2025-12-31")
+    # Se não há último dia ativo, não dá pra calcular
+    if pd.isna(ultimo_ativo):
+        continue
 
-        # Conta os meses completos até a data final
-        meses = 0
-        for mes in range(1, 13):  # Janeiro (1) até Dezembro (12)
-            inicio_mes = pd.Timestamp(f"2025-{mes:02d}-01")
-            fim_mes = pd.Timestamp(f"2025-{mes:02d}-28") + pd.offsets.MonthEnd(0)
+    # Definimos o início do período de cálculo: o último dia ativo
+    inicio_periodo = pd.Timestamp("2025-01-01")
 
-            # Verifica se trabalhou pelo menos 15 dias no mês
-            if data_final >= inicio_mes:
-                dias_trabalhados = min(data_final, fim_mes) - inicio_mes
-                if dias_trabalhados.days + 1 >= 16:
-                    meses += 1
+    # Se retorno existe, usamos ele como reentrada e seguimos até hoje (ou até 31/12/2025)
+    if pd.notna(retorno):
+        retorno_efetivo = retorno
+    else:
+        # Se ainda não voltou, ficou afastado até hoje
+        retorno_efetivo = hoje
 
-        table_2025.at[i, "Avos 2025"] = meses
+    # Garante que o retorno não passe de 31/12/2025
+    if retorno_efetivo > pd.Timestamp("2025-12-31"):
+        retorno_efetivo = pd.Timestamp("2025-12-31")
 
-# ***** Calcular o número de dias Afastados *****
+    meses = 0
+
+    for mes in range(1, 13):
+        inicio_mes = pd.Timestamp(f"2025-{mes:02d}-01")
+        fim_mes = inicio_mes + pd.offsets.MonthEnd(0)
+
+        # Se o mês começa depois do retorno, consideramos como ativo
+        if fim_mes < retorno_efetivo:
+            continue  # Estava afastado esse mês inteiro
+
+        # Considera os meses entre retorno e hoje
+        if inicio_mes > retorno_efetivo:
+            inicio_trabalho = inicio_mes
+        else:
+            inicio_trabalho = retorno_efetivo
+
+        fim_trabalho = min(fim_mes, hoje, pd.Timestamp("2025-12-31"))
+
+        if fim_trabalho < inicio_trabalho:
+            continue
+
+        dias_trabalhados = (fim_trabalho - inicio_trabalho).days + 1
+
+        if dias_trabalhados >= 16:
+            meses += 1
+
+    table_2025.at[i, "Avos 2025"] = meses
+
+
+# ***********************************************************************************
+
+
+# ***** Calcular o número de dias das pessoas Afastadas até a data de hoje *****
 dias_afastados = []
+hoje = pd.Timestamp.today()
 
 for i, row in table_2025.iterrows():
-    
-  if pd.isna (row["Retor."]):
-   dias =  (row["Afastamento"] - row["Ultimo dia Ativo"]).days
-  else:
-   dias = (row["Retor."] - row["Ultimo dia Ativo"]).days
-  dias_afastados.append(dias)
+    retorno = row["Retor."]
+    ultimo_ativo = row["Ultimo dia Ativo"]
+
+    if pd.isna(retorno):
+        dias = (hoje - ultimo_ativo).days
+    else:
+        dias = (retorno - ultimo_ativo).days
+
+    dias_afastados.append(dias)
 
 table_2025["Dias"] = dias_afastados
 
