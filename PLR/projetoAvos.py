@@ -1,5 +1,6 @@
 # Script que calcula os avos para o ano de 2025 considerando que o que conta mesmo é a data de afastamento ex: a pessoa X
-# seu último dia ativo foi 10/02 e o afastamento foi dia 16 assim não conta pois deve ser maior que 15 ou <=16
+# seu último dia ativo foi 10/02 e o afastamento foi dia 16 assim não conta pois deve ser maior que 15 ou <=16. Lembrando
+# que o filtro apenas considerou 
 
 import pandas as pd
 
@@ -50,7 +51,7 @@ for i, row in table_2025.iterrows():
 
         table_2025.at[i, "Avos 2025"] = meses
 
-# Calcular o número de dias Afastados
+# ***** Calcular o número de dias Afastados *****
 dias_afastados = []
 
 for i, row in table_2025.iterrows():
@@ -62,8 +63,8 @@ for i, row in table_2025.iterrows():
   dias_afastados.append(dias)
 
 table_2025["Dias"] = dias_afastados
-# Exibe os resultados
 
+# ***** Exibe os resultados *****
 
 exibir = [
     "Chapa",
