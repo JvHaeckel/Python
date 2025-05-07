@@ -19,11 +19,14 @@ table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors= 'c
 table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
 
 # Filtra o DataFrame table para manter apenas as linhas em que a Data Afastamento seja do ano de 2025.
-table_2025 = table[table["Afastamento"].dt.year == 2025].copy()
+
+table_2025 = table[(table["Afastamento"].dt.year == 2025) | 
+                   (table["Retor."].dt.year == 2025)].copy()
+
 #  Você deve forçar a criação de uma cópia ao criar table_2025 elimina o warning e te garante que está trabalhando em uma cópia segura.
 
 # Verificando se o filtro funcionou
-# print(table_2025[["Afastamento","Ultimo dia Ativo"]]) OK
+# print(table_2025[["Afastamento","Ultimo dia Ativo"]]) OK  
 
 # Criando nova coluna chamada Avos e atribuindo a ela um valor zerado inicial
 table_2025 ["Avos"] = 0 
