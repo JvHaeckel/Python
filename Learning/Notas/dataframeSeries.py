@@ -13,9 +13,24 @@ dataframe = pd.DataFrame(cientis)
 
 print(dataframe)
 
-
+# Séries: é como uma coluna em uma tabela. Matriz unidimensional que contém dados de qualquer tipo
 
 test = [1,2,3]
 
 test2 = pd.Series(test)
 print(test2)
+
+
+# Crie um DataFrame a partir de duas séries:
+
+dicionario = {
+    "Calorias": [420, 380, 350] ,
+    "Duração": [50, 45 , 20]
+}
+
+dataframe2 = pd.DataFrame(dicionario)
+
+# loc - atributo para retornar uma ou mais linhas especificadas
+
+
+
