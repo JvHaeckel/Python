@@ -6,7 +6,10 @@
 
 import pandas as pd
 
-cientis = { "Nome": ["Marmota", "Sergio"] , "raça": ["Maltes" , "Humano"]   }
+cientis = { 
+           "Nome": ["Marmota", "Sergio"] , 
+           "raça": ["Maltes" , "Humano"]   
+           }
 dataframe = pd.DataFrame(cientis)
 
 print(dataframe)
@@ -36,3 +39,13 @@ dataframe2 = pd.DataFrame(dicionario)
 print(dataframe2.loc[0])
 print("****************")
 
+
+# Adicione uma lista de nomes para dar um nome a cada linha:
+
+data = {
+    "Calories": [420 , 500 , 300] ,   # Coreesponde a 
+    "duration": [15 , 20 , 10]
+}
+
+df = pd.DataFrame( data , index= ['Dia 1', 'Dia 2' , 'Dia 3'])
+print(df)
