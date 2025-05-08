@@ -28,7 +28,7 @@ table_2025 = table[
 # Inicializa colunas de Avos
 table_2025["Avos Parte 1"] = 0   # Avos Parte 1 - calcula do dia 01/01/2025 até o Último dia Ativo
 table_2025["Avos Parte 2"] = 0   # Avos Parte 2 - Após retorno
-table_2025["Avos Parte 3"] = 0   # Avos Parte 3 - Calcula da Admissão (admitidos em 2025) até o Último dia Ativo 
+# table_2025["Avos Parte 3"] = 0   # Avos Parte 3 - Calcula da Admissão (admitidos em 2025) até o Último dia Ativo 
 
 # Atribui a variável hoje a data do sistema
 hoje = pd.Timestamp.today()
@@ -49,20 +49,22 @@ def contar_avos(inicio, fim):
         real_inicio = max(inicio_mes, inicio)
         real_fim = min(fim_mes, fim)
         dias = (real_fim - real_inicio).days + 1
-        if dias >= 16:
+        if dias >= 15:
             meses += 1
     return meses
 
 # Loop linha a linha
 for i, row in table_2025.iterrows():
     
-    # Parte 1 – Até o último dia ativo
+    # Parte 1 – Até o último dia ativo # Avos Parte 1 - calcula do dia 01/01/2025 até o Último dia Ativo
     ultimo_ativo = row["Ultimo dia Ativo"]
-    if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
+    admiss = row["Admis."]
+    
+    if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"): 
         avos1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
         table_2025.at[i, "Avos Parte 1"] = avos1
 
-    # Parte 2 – Após retorno (ou 0 se não retornou)
+    # Parte 2 – Após retorno (ou 0 se não retornou) 
     retorno = row["Retor."]
     afastamento = row["Afastamento"]
 
@@ -74,12 +76,17 @@ for i, row in table_2025.iterrows():
 
     table_2025.at[i, "Avos Parte 2"] = avos2
     
-    # Parte 3 - Calculando se a admissão for do ano de 2025 e se não for zera os avos: 
+    # Parte 3 - Calculando se a admissão for do ano de 2025 e se não for zera os avos: # Avos Parte 3 - Calcula da Admissão (admitidos em 2025) até o Último dia Ativo
+    # admiss = row["Admis."]
     
+    # if pd.notna(admiss) and admiss.year == 2025: 
+    #     avos3 = contar_avos(admiss, ultimo_ativo )
+    #     table_2025.at[i, "Avos Parte 3"] = avos3
+    # else: avos3 = 0
     
 
 # Soma final
-table_2025["Avos 2025"] = table_2025["Avos Parte 1"] + table_2025["Avos Parte 2"] 
+table_2025["Avos 2025"] = table_2025["Avos Parte 1"] + table_2025["Avos Parte 2"]  
 # + table_2025["Avos Parte 3"]
 
 
@@ -107,7 +114,7 @@ table_2025["Dias"] = dias_afastados
 colunas = [
     "Chapa",  "Nome",  "Admis.",
     "Ultimo dia Ativo", "Afastamento",  "Retor.", "Dias", 
-    "Avos Parte 1", "Avos Parte 2" ,"Avos 2025"    # "Avos Parte 3"
+    "Avos Parte 1", "Avos Parte 2" , "Avos 2025"  
 ]
 
 resultado = table_2025[colunas]
