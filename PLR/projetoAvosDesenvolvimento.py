@@ -12,7 +12,7 @@ arquivo = r"C:\Users\joaorocha\Desktop\Py\PLR\Projeto Avos - Completo.xlsm"
 table = pd.read_excel(arquivo, sheet_name="Base")
 
 # Converte colunas de data para o Python poder interpretar
-table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce')
+table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce') #
 table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors='coerce')
 table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
 
