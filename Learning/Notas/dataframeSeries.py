@@ -43,9 +43,28 @@ print("****************")
 # Adicione uma lista de nomes para dar um nome a cada linha:
 
 data = {
-    "Calories": [420 , 500 , 300] ,   # Coreesponde a 
-    "duration": [15 , 20 , 10]
+    "Calories": [420 , 500 , 300] ,   # Corresponde a coluna de Calories
+    "Duration": [15 , 20 , 10]        # Corresponde a coluna de Duration
 }
 
 df = pd.DataFrame( data , index= ['Dia 1', 'Dia 2' , 'Dia 3'])
 print(df)
+print("****************")
+
+# Localizar índices nomeados
+
+print(df.loc["Dia 2"])
+print("****************")
+
+
+# Carregar arquivos em um DataFrame
+
+
+csv = pd.read_csv ()
+
+
+
+
+
+
+
