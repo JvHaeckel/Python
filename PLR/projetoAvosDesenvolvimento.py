@@ -12,35 +12,37 @@ arquivo = r"C:\Users\joaorocha\Desktop\Py\PLR\Projeto Avos - Completo.xlsm"
 table = pd.read_excel(arquivo, sheet_name="Base")
 
 # Converte colunas de data para o Python poder interpretar
-table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce') #
-table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors='coerce')
-table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
+table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors = 'coerce')  # errors="coerce": transforma datas inválidas em NaT (evita erro).
+table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors = 'coerce')
+table["Retor."] = pd.to_datetime(table["Retor."], errors = 'coerce')
+# table["Amdmis."] = pd.to_datetime(table["Admiss."], errors = 'coerce')
 
 # Filtra registros com datas em 2025
 table_2025 = table[
     (table["Afastamento"].dt.year == 2025) |
     (table["Retor."].dt.year == 2025) |
     (table["Ultimo dia Ativo"].dt.year == 2025)
+    # (table["Admiss."].dt.year == 2025)
 ].copy()
 
 # Inicializa colunas de Avos
-table_2025["Avos Parte 1"] = 0
-table_2025["Avos Parte 2"] = 0
+table_2025["Avos Parte 1"] = 0   # Avos Parte 1 - calcula do dia 01/01/2025 até o Último dia Ativo
+table_2025["Avos Parte 2"] = 0   # Avos Parte 2 - Após retorno
+table_2025["Avos Parte 3"] = 0   # Avos Parte 3 - Calcula da Admissão (admitidos em 2025) até o Último dia Ativo 
 
 # Atribui a variável hoje a data do sistema
 hoje = pd.Timestamp.today()
-
 
 # === Função para contar avos válidos no ano de 2025 ===
 
 # Função auxiliar: calcula número de avos num intervalo (mín. 16 dias por mês)
 def contar_avos(inicio, fim):
-    if pd.isna(inicio) or pd.isna(fim) or fim < pd.Timestamp("2025-01-01"):
+    if pd.isna(inicio) or pd.isna(fim) or fim < pd.Timestamp("2025-01-01"): 
         return 0
 
     meses = 0
     for mes in range(1, 13):
-        inicio_mes = pd.Timestamp(f"2025-{mes:02d}-01")
+        inicio_mes = pd.Timestamp(f"2025-{mes:02d}-01")  # :02d garante que o mês tenha dois dígitos
         fim_mes = inicio_mes + MonthEnd(0)
         if fim < inicio_mes or inicio > fim_mes:
             continue
@@ -53,6 +55,7 @@ def contar_avos(inicio, fim):
 
 # Loop linha a linha
 for i, row in table_2025.iterrows():
+    
     # Parte 1 – Até o último dia ativo
     ultimo_ativo = row["Ultimo dia Ativo"]
     if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
@@ -70,9 +73,14 @@ for i, row in table_2025.iterrows():
         avos2 = 0
 
     table_2025.at[i, "Avos Parte 2"] = avos2
+    
+    # Parte 3 - Calculando se a admissão for do ano de 2025 e se não for zera os avos: 
+    
+    
 
 # Soma final
-table_2025["Avos 2025"] = table_2025["Avos Parte 1"] + table_2025["Avos Parte 2"]
+table_2025["Avos 2025"] = table_2025["Avos Parte 1"] + table_2025["Avos Parte 2"] 
+# + table_2025["Avos Parte 3"]
 
 
 # ***************************************************************************************************************************************************
@@ -97,9 +105,9 @@ table_2025["Dias"] = dias_afastados
 
 # Seleção das colunas para exportação
 colunas = [
-    "Chapa", "Divisões", "Nome", "Função", "Admis.",
-    "Ultimo dia Ativo", "Afastamento", "Cid", "Retor.",
-    "Dias", "Motivo", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
+    "Chapa",  "Nome",  "Admis.",
+    "Ultimo dia Ativo", "Afastamento",  "Retor.", "Dias", 
+    "Avos Parte 1", "Avos Parte 2" ,"Avos 2025"    # "Avos Parte 3"
 ]
 
 resultado = table_2025[colunas]
@@ -107,7 +115,6 @@ resultado = table_2025[colunas]
 # Exporta para Excel
 saida = r"C:\Users\joaorocha\Desktop\Py\PLR\Resultado_Avos_2025.xlsx"
 resultado.to_excel(saida, index=False)
-
 
 print(resultado)
 print(f"Arquivo exportado com sucesso para: {saida}")
