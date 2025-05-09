@@ -61,11 +61,21 @@ def processar():
             situacao = row["Situação"]
             retorno = row["Retor."]
 
-            if situacao == "A" and retorno == 0:
-                avos = contar_avos(pd.Timestamp("2025-01-01"), data)
+# a situação é "A" (ativo), e se não há uma data de retorno registrada (pd.isna(retorno) → retorno é NaT).
+
+            if situacao == "A" and pd.isna(retorno):
+                avos = contar_avos(pd.Timestamp("2025-01-01"), data) # Chama a função contar_avos() para contar os avos válidos entre 01/01/2025 e a data informada (armazenada na variável data, vinda do campo da interface gráfica).
                 table_2025.at[i, "Avos 2025"] = avos
                 table_2025.at[i, "Avos Parte 1"] = avos
                 table_2025.at[i, "Avos Parte 2"] = 0
+
+            elif situacao == "A" and pd.notna(retorno):
+                avos1 = contar_avos(pd.Timestamp("2025-01-01"), retorno - pd.Timedelta(days=1))
+                avos2 = contar_avos(retorno, data)
+                table_2025.at[i, "Avos Parte 1"] = avos1
+                table_2025.at[i, "Avos Parte 2"] = avos2
+                table_2025.at[i, "Avos 2025"] = avos1 + avos2
+
             elif situacao == "F":
                 ultimo_ativo = row["Ultimo dia Ativo"]
                 if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
@@ -74,11 +84,11 @@ def processar():
                 else:
                     avos1 = 0
 
-                retorno = row["Retor."]
                 if pd.notna(retorno):
                     avos2 = contar_avos(retorno, data)
                 else:
                     avos2 = 0
+
                 table_2025.at[i, "Avos Parte 2"] = avos2
                 table_2025.at[i, "Avos 2025"] = avos1 + avos2
 
@@ -108,6 +118,7 @@ def processar():
         resultado.to_excel(saida, index=False)
 
         messagebox.showinfo("Sucesso", f"Arquivo exportado para:\n{saida}")
+
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao processar o arquivo:\n{e}")
 
