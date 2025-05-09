@@ -93,7 +93,7 @@ def processar():
         table_2025["Dias"] = dias_afastados
 
         colunas = [
-            "Chapa", "Nome", "Admis.", "Situação"                
+            "Chapa", "Nome", "Admis.", "Situação"   ,             
             "Ultimo dia Ativo", "Afastamento", "Retor.", 
             "Dias", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
         ]

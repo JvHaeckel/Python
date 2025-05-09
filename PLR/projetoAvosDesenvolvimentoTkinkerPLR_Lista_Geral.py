@@ -26,7 +26,7 @@ def processar():
     data_input = entrada_data.get()
 
     try:
-        hoje = pd.to_datetime(data_input, dayfirst=True)
+        data = pd.to_datetime(data_input, dayfirst=True)
     except Exception:
         messagebox.showerror("Erro", "Data inválida. Use o formato DD/MM/AAAA.")
         return
@@ -41,6 +41,7 @@ def processar():
 
     try:
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
+        table.columns = table.columns.str.strip()  # Remove espaços extras nos nomes das colunas
 
         table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce')
         table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors='coerce')
@@ -49,35 +50,37 @@ def processar():
         table_2025 = table[
             (table["Afastamento"].dt.year == 2025) |
             (table["Retor."].dt.year == 2025) |
-            (table["Ultimo dia Ativo"].dt.year == 2025)
+            (table["Ultimo dia Ativo"].dt.year == 2025) |
+            (table["Situação"] == "A")  # Inclui os ativos
         ].copy()
 
         table_2025["Avos Parte 1"] = 0
         table_2025["Avos Parte 2"] = 0
 
         for i, row in table_2025.iterrows():
-            situacao = row.get("Situação", "")
+            situacao = row["Situação"]
+            retorno = row["Retor."]
 
-            if situacao == "A":
-                meses = contar_avos(pd.Timestamp("2025-01-01"), hoje)
-                table_2025.at[i, "Avos Parte 1"] = meses
+            if situacao == "A" and retorno == 0:
+                avos = contar_avos(pd.Timestamp("2025-01-01"), data)
+                table_2025.at[i, "Avos 2025"] = avos
+                table_2025.at[i, "Avos Parte 1"] = avos
                 table_2025.at[i, "Avos Parte 2"] = 0
-
             elif situacao == "F":
                 ultimo_ativo = row["Ultimo dia Ativo"]
-                retorno = row["Retor."]
-
                 if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
                     avos1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
                     table_2025.at[i, "Avos Parte 1"] = avos1
+                else:
+                    avos1 = 0
 
+                retorno = row["Retor."]
                 if pd.notna(retorno):
-                    avos2 = contar_avos(retorno, hoje)
+                    avos2 = contar_avos(retorno, data)
                 else:
                     avos2 = 0
                 table_2025.at[i, "Avos Parte 2"] = avos2
-
-        table_2025["Avos 2025"] = table_2025["Avos Parte 1"] + table_2025["Avos Parte 2"]
+                table_2025.at[i, "Avos 2025"] = avos1 + avos2
 
         dias_afastados = []
         for i, row in table_2025.iterrows():
@@ -86,7 +89,7 @@ def processar():
             if pd.isna(ultimo_ativo):
                 dias = None
             elif pd.isna(retorno):
-                dias = (hoje - ultimo_ativo).days
+                dias = (data - ultimo_ativo).days
             else:
                 dias = (retorno - ultimo_ativo).days
             dias_afastados.append(dias)
@@ -95,7 +98,7 @@ def processar():
 
         colunas = [
             "Chapa", "Nome", "Admis.", "Situação",
-            "Ultimo dia Ativo", "Afastamento", "Retor.", 
+            "Ultimo dia Ativo", "Afastamento", "Retor.",
             "Dias", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
         ]
 
