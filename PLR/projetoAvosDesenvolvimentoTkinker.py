@@ -38,14 +38,9 @@ def processar():
 
     if not caminho_arquivo:
         return
-    
-# TEM QUE TIRAR O SHEET_NAME  # TEM QUE TIRAR O SHEET_NAME # TEM QUE TIRAR O SHEET_NAME # TEM QUE TIRAR O SHEET_NAME
 
-# TEM QUE TIRAR O SHEET_NAME  # TEM QUE TIRAR O SHEET_NAME # TEM QUE TIRAR O SHEET_NAME # TEM QUE TIRAR O SHEET_NAME
-
-# TEM QUE TIRAR O SHEET_NAME  # TEM QUE TIRAR O SHEET_NAME # TEM QUE TIRAR O SHEET_NAME # TEM QUE TIRAR O SHEET_NAME
     try:
-        table = pd.read_excel(caminho_arquivo, sheet_name="Base")  
+        table = pd.read_excel(caminho_arquivo, sheet_name="Base")
 
         table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce')
         table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors='coerce')
@@ -99,7 +94,7 @@ def processar():
 
         resultado = table_2025[colunas]
 
-        saida = caminho_arquivo.replace(".xlsm", "_Avos Calculados.xlsx").replace(".xlsx", "_RESULTADO.xlsx")
+        saida = caminho_arquivo.replace(".xlsm", "_RESULTADO.xlsx").replace(".xlsx", "_RESULTADO.xlsx")
         resultado.to_excel(saida, index=False)
 
         messagebox.showinfo("Sucesso", f"Arquivo exportado para:\n{saida}")
