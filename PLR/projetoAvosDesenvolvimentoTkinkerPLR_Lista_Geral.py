@@ -38,13 +38,7 @@ def processar():
 
     if not caminho_arquivo:
         return
-# Retirar Geral como planilha escolhida # Retirar Geral como planilha escolhida # Retirar Geral como planilha escolhida
 
-
-# Retirar Geral como planilha escolhida # Retirar Geral como planilha escolhida # Retirar Geral como planilha escolhida
-
-
-# Retirar Geral como planilha escolhida # Retirar Geral como planilha escolhida # Retirar Geral como planilha escolhida
     try:
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
 
@@ -62,19 +56,26 @@ def processar():
         table_2025["Avos Parte 2"] = 0
 
         for i, row in table_2025.iterrows():
-            ultimo_ativo = row["Ultimo dia Ativo"]
-            admiss = row["Admis."]
+            situacao = row.get("Situação", "")
 
-            if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
-                avos1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
-                table_2025.at[i, "Avos Parte 1"] = avos1
+            if situacao == "A":
+                meses = contar_avos(pd.Timestamp("2025-01-01"), hoje)
+                table_2025.at[i, "Avos Parte 1"] = meses
+                table_2025.at[i, "Avos Parte 2"] = 0
 
-            retorno = row["Retor."]
-            if pd.notna(retorno):
-                avos2 = contar_avos(retorno, hoje)
-            else:
-                avos2 = 0
-            table_2025.at[i, "Avos Parte 2"] = avos2
+            elif situacao == "F":
+                ultimo_ativo = row["Ultimo dia Ativo"]
+                retorno = row["Retor."]
+
+                if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
+                    avos1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
+                    table_2025.at[i, "Avos Parte 1"] = avos1
+
+                if pd.notna(retorno):
+                    avos2 = contar_avos(retorno, hoje)
+                else:
+                    avos2 = 0
+                table_2025.at[i, "Avos Parte 2"] = avos2
 
         table_2025["Avos 2025"] = table_2025["Avos Parte 1"] + table_2025["Avos Parte 2"]
 
@@ -93,7 +94,7 @@ def processar():
         table_2025["Dias"] = dias_afastados
 
         colunas = [
-            "Chapa", "Nome", "Admis.", "Situação"                
+            "Chapa", "Nome", "Admis.", "Situação",
             "Ultimo dia Ativo", "Afastamento", "Retor.", 
             "Dias", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
         ]
