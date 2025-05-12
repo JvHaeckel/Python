@@ -41,43 +41,53 @@ def processar():
 
     try:
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
-        table.columns = table.columns.str.strip()  # Remove espaços extras nos nomes das colunas
+        table.columns = table.columns.str.strip()
 
         table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce')
         table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors='coerce')
         table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
+        table["Admis."] = pd.to_datetime(table["Admis."], errors='coerce')
 
         table_2025 = table[
             (table["Afastamento"].dt.year == 2025) |
             (table["Retor."].dt.year == 2025) |
             (table["Ultimo dia Ativo"].dt.year == 2025) |
-            (table["Situação"] == "A")  # Inclui os ativos
+            (table["Situação"] == "A")
         ].copy()
 
         table_2025["Avos Parte 1"] = 0
         table_2025["Avos Parte 2"] = 0
+        table_2025["Avos 2025"] = 0
 
         for i, row in table_2025.iterrows():
             situacao = row["Situação"]
             retorno = row["Retor."]
+            admissao = row["Admis."]
+            afastamento = row["Afastamento"]
+            ultimo_ativo = row["Ultimo dia Ativo"]
+            data_final = data
 
-# a situação é "A" (ativo), e se não há uma data de retorno registrada (pd.isna(retorno) → retorno é NaT).
+            if situacao == "A":
+                if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= pd.Timestamp("2025-01-01"):
+                    parte1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
+                    parte2 = contar_avos(retorno, data_final)
+                    table_2025.at[i, "Avos Parte 1"] = parte1
+                    table_2025.at[i, "Avos Parte 2"] = parte2
+                    table_2025.at[i, "Avos 2025"] = parte1 + parte2
 
-            if situacao == "A" and pd.isna(retorno):
-                avos = contar_avos(pd.Timestamp("2025-01-01"), data) # Chama a função contar_avos() para contar os avos válidos entre 01/01/2025 e a data informada (armazenada na variável data, vinda do campo da interface gráfica).
-                table_2025.at[i, "Avos 2025"] = avos
-                table_2025.at[i, "Avos Parte 1"] = avos
-                table_2025.at[i, "Avos Parte 2"] = 0
-    
-            elif situacao == "A" and pd.notna(retorno):
-                avos1 = contar_avos(pd.Timestamp("2025-01-01"), retorno - pd.Timedelta(days=1))
-                avos2 = contar_avos(retorno, data)
-                table_2025.at[i, "Avos Parte 1"] = avos1
-                table_2025.at[i, "Avos Parte 2"] = avos2
-                table_2025.at[i, "Avos 2025"] = avos1 + avos2
+                elif pd.notna(admissao) and admissao >= pd.Timestamp("2025-01-01"):
+                    avos = contar_avos(admissao, data_final)
+                    table_2025.at[i, "Avos Parte 1"] = avos
+                    table_2025.at[i, "Avos Parte 2"] = 0
+                    table_2025.at[i, "Avos 2025"] = avos
+
+                else:
+                    avos = contar_avos(pd.Timestamp("2025-01-01"), data_final)
+                    table_2025.at[i, "Avos Parte 1"] = avos
+                    table_2025.at[i, "Avos Parte 2"] = 0
+                    table_2025.at[i, "Avos 2025"] = avos
 
             elif situacao == "F":
-                ultimo_ativo = row["Ultimo dia Ativo"]
                 if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
                     avos1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
                     table_2025.at[i, "Avos Parte 1"] = avos1
@@ -85,7 +95,7 @@ def processar():
                     avos1 = 0
 
                 if pd.notna(retorno):
-                    avos2 = contar_avos(retorno, data)
+                    avos2 = contar_avos(retorno, data_final)
                 else:
                     avos2 = 0
 
