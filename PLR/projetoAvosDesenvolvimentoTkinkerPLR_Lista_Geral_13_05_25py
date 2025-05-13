@@ -151,33 +151,40 @@ def processar():
             afastamento = row["Afastamento"]
             ultimo_ativo = row["Ultimo dia Ativo"]
             data_final = data
-
+            data_incio_ano = pd.Timestamp("2025-01-01") # Coloquei para susbtituir nos IFs aninhados deixando mais claro
+            
             if situacao == "A":
                 # pd.notna(retorno) - verifica se a variável retorno não é nula
-                # pd.notna(ultimo_ativo) - verifica se a variável retorno não é nula
-                # 
-                if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= pd.Timestamp("2025-01-01"):
-                    parte1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
+                # pd.notna(ultimo_ativo) - verifica se a variável ultimo_ativo não é nula
+                # retorno >= pd.Timestamp("2025-01-01") -  verifica se as linhas da coluna retorno são maiores
+                # ou iguais a ao inicio do ano 01/01/2025
+                if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= data_incio_ano:
+                    
+                    # A parte1 vai chamar a função contar_avos colocando a data de Início do ano e Último dia Ativo
+                    parte1 = contar_avos(data_incio_ano, ultimo_ativo) 
+                   
+                    # A parte2 vai chamar a função contar_avos colocando a data de Retorno e a data escolhida pelo user
                     parte2 = contar_avos(retorno, data_final)
+                 
                     table_2025.at[i, "Avos Parte 1"] = parte1
                     table_2025.at[i, "Avos Parte 2"] = parte2
                     table_2025.at[i, "Avos 2025"] = parte1 + parte2
 
-                elif pd.notna(admissao) and admissao >= pd.Timestamp("2025-01-01"):
+                elif pd.notna(admissao) and admissao >= data_incio_ano:
                     avos = contar_avos(admissao, data_final)
                     table_2025.at[i, "Avos Parte 1"] = avos
                     table_2025.at[i, "Avos Parte 2"] = 0
                     table_2025.at[i, "Avos 2025"] = avos
 
                 else:
-                    avos = contar_avos(pd.Timestamp("2025-01-01"), data_final)
+                    avos = contar_avos(data_incio_ano, data_final)
                     table_2025.at[i, "Avos Parte 1"] = avos
                     table_2025.at[i, "Avos Parte 2"] = 0
                     table_2025.at[i, "Avos 2025"] = avos
 
             elif situacao == "F":
-                if pd.notna(ultimo_ativo) and ultimo_ativo >= pd.Timestamp("2025-01-01"):
-                    avos1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
+                if pd.notna(ultimo_ativo) and ultimo_ativo >= data_incio_ano:
+                    avos1 = contar_avos(data_incio_ano, ultimo_ativo)
                     table_2025.at[i, "Avos Parte 1"] = avos1
                 else:
                     avos1 = 0
