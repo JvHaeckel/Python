@@ -13,7 +13,7 @@ cientis = {
 dataframe = pd.DataFrame(cientis)
 
 print(dataframe)
-print("****************")
+print("*****Primeiro***********")
 
 # Séries: é como uma coluna em uma tabela. Matriz unidimensional que contém dados de qualquer tipo
 
@@ -21,7 +21,7 @@ test = [1,2,3]
 test2 = pd.Series(test)
 
 print(test2)
-print("****************")
+print("******Segundo********")
 
 
 # Crie um DataFrame a partir de duas séries:
@@ -32,12 +32,13 @@ dicionario = {
 }
 
 dataframe2 = pd.DataFrame(dicionario)
-
+print(dataframe)
+print("******Terceiro********")
 
 # loc - atributo para retornar uma ou mais linhas especificadas
 
 print(dataframe2.loc[0])
-print("****************")
+print("*******Quarto*********")
 
 
 # Adicione uma lista de nomes para dar um nome a cada linha:
@@ -49,14 +50,14 @@ data = {
 
 df = pd.DataFrame( data , index= ['Dia 1', 'Dia 2' , 'Dia 3'])
 print(df)
-print("****************")
+print("*******Quinto*********")
 
 # Localizar índices nomeados
 
 print(df.loc["Dia 2"])
-print("****************")
+print("******Sexto**********")
 
-
+# print(df.loc[2 ["Calories" , "Duration"]] = [""] )
 # Carregar arquivos em um DataFrame
 
 

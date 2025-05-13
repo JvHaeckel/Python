@@ -139,7 +139,7 @@ def processar():
         table_2025["Avos 2025"] = 0
 
 
-        # i - número da linha (ídndice)
+        # i - número da linha (índice)
         # row -  informações da linha
         for i, row in table_2025.iterrows():
             
@@ -166,26 +166,27 @@ def processar():
                     # A parte2 vai chamar a função contar_avos colocando a data de Retorno e a data escolhida pelo user
                     parte2 = contar_avos(retorno, data_final)
                  
-                    table_2025.at[i, "Avos Parte 1"] = parte1
-                    table_2025.at[i, "Avos Parte 2"] = parte2
-                    table_2025.at[i, "Avos 2025"] = parte1 + parte2
+                    # .loc[i, "coluna"] - estamos dizendo linha i, coluna "coluna"
+                    table_2025.loc[i, "Avos Parte 1"] = parte1
+                    table_2025.loc[i, "Avos Parte 2"] = parte2
+                    table_2025.loc[i, "Avos 2025"] = parte1 + parte2
 
                 elif pd.notna(admissao) and admissao >= data_incio_ano:
                     avos = contar_avos(admissao, data_final)
-                    table_2025.at[i, "Avos Parte 1"] = avos
-                    table_2025.at[i, "Avos Parte 2"] = 0
-                    table_2025.at[i, "Avos 2025"] = avos
+                    table_2025.loc[i, "Avos Parte 1"] = avos
+                    table_2025.loc[i, "Avos Parte 2"] = 0
+                    table_2025.loc[i, "Avos 2025"] = avos
 
                 else:
                     avos = contar_avos(data_incio_ano, data_final)
-                    table_2025.at[i, "Avos Parte 1"] = avos
-                    table_2025.at[i, "Avos Parte 2"] = 0
-                    table_2025.at[i, "Avos 2025"] = avos
+                    table_2025.loc[i, "Avos Parte 1"] = avos
+                    table_2025.loc[i, "Avos Parte 2"] = 0
+                    table_2025.loc[i, "Avos 2025"] = avos
 
             elif situacao == "F":
                 if pd.notna(ultimo_ativo) and ultimo_ativo >= data_incio_ano:
                     avos1 = contar_avos(data_incio_ano, ultimo_ativo)
-                    table_2025.at[i, "Avos Parte 1"] = avos1
+                    table_2025.loc[i, "Avos Parte 1"] = avos1
                 else:
                     avos1 = 0
 
@@ -194,8 +195,8 @@ def processar():
                 else:
                     avos2 = 0
 
-                table_2025.at[i, "Avos Parte 2"] = avos2
-                table_2025.at[i, "Avos 2025"] = avos1 + avos2
+                table_2025.loc[i, "Avos Parte 2"] = avos2
+                table_2025.loc[i, "Avos 2025"] = avos1 + avos2
 
 
 ################ DIAS AFASTADOS ################
