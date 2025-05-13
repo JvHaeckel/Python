@@ -160,7 +160,7 @@ def processar():
                 # ou iguais a ao inicio do ano 01/01/2025
                 if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= data_incio_ano:
                     
-                    # A parte1 vai chamar a função contar_avos colocando a data de Início do ano e Último dia Ativo
+                    # A parte1 vai chamar a função contar_avos colocando a data de Início do ano ano 2025 e Último dia Ativo
                     parte1 = contar_avos(data_incio_ano, ultimo_ativo) 
                    
                     # A parte2 vai chamar a função contar_avos colocando a data de Retorno e a data escolhida pelo user
@@ -170,7 +170,8 @@ def processar():
                     table_2025.loc[i, "Avos Parte 1"] = parte1
                     table_2025.loc[i, "Avos Parte 2"] = parte2
                     table_2025.loc[i, "Avos 2025"] = parte1 + parte2
-
+                # pd.notna(admissao) -  verifica se a variável não é nula
+                # admissao >= data_incio_ano -  se a admissão for maior que a data de de Início do ano 2025
                 elif pd.notna(admissao) and admissao >= data_incio_ano:
                     avos = contar_avos(admissao, data_final)
                     table_2025.loc[i, "Avos Parte 1"] = avos
