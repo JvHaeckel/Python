@@ -102,9 +102,16 @@ def processar():
         # CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET 
         
         # CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET 
+        
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
+        
+        # Acessa a lista de nomes das colunas do DataFrame table
+        # str - transforma em String
+        # strip() - retira espaçoes em branco
         table.columns = table.columns.str.strip()
 
+        # Converte os valores das colunas para o tipo datetime do Pandas (representando datas e horas)e tratando
+        # de valores que não podem ser convertidos para NAN/NAT
         table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce')
         table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors='coerce')
         table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
