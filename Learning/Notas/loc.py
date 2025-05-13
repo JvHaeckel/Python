@@ -33,3 +33,7 @@ filtrar = df.loc[df['Idade'] > 25]
 print(df)
 
 
+print ( "Exemplo 6: Usar .loc em um loop, tennte Esse código soma 1 em todas as idades, linha por linha.")
+
+for i in df.index:
+    df.loc[i, "Idade"] = df.loc[i, "Idade"] +1
