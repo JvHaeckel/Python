@@ -201,20 +201,25 @@ def processar():
 
 ################ DIAS AFASTADOS ################
 
+        # Criação de Lista ( não foi dicionário, nem tuplas e nem )
         dias_afastados = []
         for i, row in table_2025.iterrows():
             retorno = row["Retor."]
             ultimo_ativo = row["Ultimo dia Ativo"]
             
+            # Se o último dia Ativo for nulo , caso sim o núemro de dias = none
             if pd.isna(ultimo_ativo):
                 dias = None
+                # Se o último dia Ativo não for nulo e a data de Retorno for nula logo
+                # dias = data escolhida do user - ultimo dia ativo
             elif pd.isna(retorno):
                 dias = (data - ultimo_ativo).days
+                # Se tiver o último dia Ativo não nulo e a data de retorno não nula calcula entre elas
             else:
                 dias = (retorno - ultimo_ativo).days
             dias_afastados.append(dias)
 
-        table_2025["Dias"] = dias_afastados
+        table_2025["Dias Afastados"] = dias_afastados
 
         colunas = [
             "Chapa", "Nome", "Admis.", "Situação",
