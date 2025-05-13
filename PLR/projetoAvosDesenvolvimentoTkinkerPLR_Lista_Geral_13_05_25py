@@ -90,7 +90,6 @@ def processar():
     # Este é o padrão de arquivo que será usado para filtrar os arquivos mostrados. O asterisco (*) é um caractere curinga que significa
     # "qualquer coisa". Portanto, *.xlsx significa "qualquer arquivo com a extensão .xlsx"...
 
-
     #  se o usuário não selecionou nenhum arquivo), esta linha fará com que a função atual termine sua execução imediatamente
     if not caminho_arquivo:
         return
@@ -137,7 +136,6 @@ def processar():
         table_2025["Avos Parte 1"] = 0
         table_2025["Avos Parte 2"] = 0
         table_2025["Avos 2025"] = 0
-
 
         # i - número da linha (índice)
         # row -  informações da linha
