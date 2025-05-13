@@ -58,10 +58,19 @@ def contar_avos(inicio, fim):
 ################ Função principal de processamento ################
 
 def processar():
+     
+     # Pegar a data que o usuário digitou na tela, na parte do Tkinter
     data_input = entrada_data.get()
 
+    
+    # Transformar a data o que o usuário digitou em uma data de verdade.
+    # Indica que o dia vem primeiro, avisando que a data está no formato Dia/Mês/Ano (DD/MM/AAAA). E não
+    # no formato americano: MM/DD/AAAA
     try:
         data = pd.to_datetime(data_input, dayfirst=True)
+        
+    # Se o que o usuário digitou não for uma data válida, o programa vai dar um erro. Vamos "pegar" esse 
+    # erro e mostrar uma mensagem para o usuário. 
     except Exception:
         messagebox.showerror("Erro", "Data inválida. Use o formato DD/MM/AAAA.")
         return
@@ -170,7 +179,10 @@ def processar():
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao processar o arquivo:\n{e}")
 
-# === Interface gráfica ===
+
+
+################ Interface gráfica ################
+
 janela = tk.Tk()
 janela.geometry("400x220")
 janela.title("Cálculo de Avos 2025")
