@@ -139,8 +139,12 @@ def processar():
         table_2025["Avos 2025"] = 0
 
 
-
+        # i - número da linha (ídndice)
+        # row -  informações da linha
         for i, row in table_2025.iterrows():
+            
+            # Essas variáveis estão apenas pegando os valores de cada linha das colunas : Essas variáveis estão apenas pegando os valores das colunas ,
+            # Situação, Retor, Admis, Afastamento e Ultimo dia Ativo.
             situacao = row["Situação"]
             retorno = row["Retor."]
             admissao = row["Admis."]
@@ -149,6 +153,9 @@ def processar():
             data_final = data
 
             if situacao == "A":
+                # pd.notna(retorno) - verifica se a variável retorno não é nula
+                # pd.notna(ultimo_ativo) - verifica se a variável retorno não é nula
+                # 
                 if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= pd.Timestamp("2025-01-01"):
                     parte1 = contar_avos(pd.Timestamp("2025-01-01"), ultimo_ativo)
                     parte2 = contar_avos(retorno, data_final)
