@@ -55,6 +55,7 @@ def contar_avos(inicio, fim):
             meses += 1
     return meses
 
+
 ################ Função principal de processamento ################
 
 def processar():
@@ -62,7 +63,6 @@ def processar():
      # Pegar a data que o usuário digitou na tela, na parte do Tkinter
     data_input = entrada_data.get()
 
-    
     # Transformar a data o que o usuário digitou em uma data de verdade.
     # Indica que o dia vem primeiro, avisando que a data está no formato Dia/Mês/Ano (DD/MM/AAAA). E não
     # no formato americano: MM/DD/AAAA
@@ -233,7 +233,6 @@ def processar():
 
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao processar o arquivo:\n{e}")
-
 
 
 ################ Interface gráfica ################
