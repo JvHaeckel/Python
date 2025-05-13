@@ -95,6 +95,8 @@ def processar():
     if not caminho_arquivo:
         return
 
+
+################ LENDO O EXCEL  ################
     try:
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
         table.columns = table.columns.str.strip()
