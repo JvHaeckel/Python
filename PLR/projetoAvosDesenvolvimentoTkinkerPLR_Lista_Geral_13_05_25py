@@ -75,11 +75,18 @@ def processar():
         messagebox.showerror("Erro", "Data inválida. Use o formato DD/MM/AAAA.")
         return
 
+    # Essa parte do código em Python utiliza a biblioteca tkinter (através do módulo filedialog) para abrir
+    # uma janela de diálogo que permite ao usuário selecionar um arquivo Excel.
     caminho_arquivo = filedialog.askopenfilename(
+        
+    #  filedialog: É uma função do Tkinter que abre a janela "Abrir arquivo".
+    # .askopenfilename(): Essa é uma função do módulo filedialog (que faz parte do tkinter) e significa literalmente:
+    # "perguntar qual arquivo abrir".
         title="Selecione o arquivo Excel",
         filetypes=[("Arquivos Excel", "*.xlsx *.xlsm *.xls")]
     )
 
+    #  se o usuário não selecionou nenhum arquivo), esta linha fará com que a função atual termine sua execução imediatamente
     if not caminho_arquivo:
         return
 
