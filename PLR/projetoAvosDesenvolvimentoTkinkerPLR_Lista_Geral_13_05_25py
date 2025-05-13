@@ -98,6 +98,10 @@ def processar():
 
 ################ LENDO O EXCEL  ################
     try:
+        
+        # CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET 
+        
+        # CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET 
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
         table.columns = table.columns.str.strip()
 
