@@ -110,23 +110,35 @@ def processar():
         # strip() - retira espaçoes em branco
         table.columns = table.columns.str.strip()
 
+        # Temos que tratar as datas para poder trabalhar com elas, como anteriormente usamos o pandas.read
+        # sabemos que virou um DATAFRAME assim sendo temos que usar os módulos/funções do Pandas, logo usaremos
+        # pd.to_datetime pq ele trata com colunas diferente do Timestamp que trata valores individuais. 
+        
         # Converte os valores das colunas para o tipo datetime do Pandas (representando datas e horas)e tratando
-        # de valores que não podem ser convertidos para NAN/NAT
+        # de valores que não podem ser convertidos (inválidos) para NAN/NAT
         table["Afastamento"] = pd.to_datetime(table["Afastamento"], errors='coerce')
         table["Ultimo dia Ativo"] = pd.to_datetime(table["Ultimo dia Ativo"], errors='coerce')
         table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
         table["Admis."] = pd.to_datetime(table["Admis."], errors='coerce')
 
+
+       # FILTRAGEM - filtra as linhas do DATAFRAME tabel para as colunas de datas de acordo com o ano de 2025
+       # e a Situação de ATIVO (A). 
         table_2025 = table[
             (table["Afastamento"].dt.year == 2025) |
             (table["Retor."].dt.year == 2025) |
             (table["Ultimo dia Ativo"].dt.year == 2025) |
             (table["Situação"] == "A")
         ].copy()
+        # Vamos extrair o ano para cada coluna que tem as datas. 
+        # copy() - criamos uma cópia para não modificar o DATAFRAME original evitando o aviso de "SettingWithCopyWarning"
 
+        #  Inicializar três novas colunas no DataFrame table_2025.
         table_2025["Avos Parte 1"] = 0
         table_2025["Avos Parte 2"] = 0
         table_2025["Avos 2025"] = 0
+
+
 
         for i, row in table_2025.iterrows():
             situacao = row["Situação"]
