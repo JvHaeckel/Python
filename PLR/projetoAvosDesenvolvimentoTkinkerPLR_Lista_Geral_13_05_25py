@@ -55,7 +55,8 @@ def contar_avos(inicio, fim):
             meses += 1
     return meses
 
-# Função principal de processamento
+################ Função principal de processamento ################
+
 def processar():
     data_input = entrada_data.get()
 
@@ -135,6 +136,9 @@ def processar():
 
                 table_2025.at[i, "Avos Parte 2"] = avos2
                 table_2025.at[i, "Avos 2025"] = avos1 + avos2
+
+
+################ DIAS AFASTADOS ################
 
         dias_afastados = []
         for i, row in table_2025.iterrows():
