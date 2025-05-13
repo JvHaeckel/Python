@@ -43,10 +43,12 @@ print("")
 print("5) Filtre e mostre os funcionários que ganham mais de 3000 reais.")
 print("")
 
+filter = df.loc[df["Salario"] > 3000]
 
 print(df)
 print("")
 
+# 
 
 
 
