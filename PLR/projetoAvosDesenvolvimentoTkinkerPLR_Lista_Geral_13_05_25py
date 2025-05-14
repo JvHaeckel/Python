@@ -8,7 +8,7 @@ from tkinter import filedialog, messagebox
 # Se as datas forem inválidas (vazias) ou a data final for antes de 2025, retorna 0 avos.
 def contar_avos(inicio, fim):
     # Primeiro, vamos verificar se as datas são válidas. Se a data de início ou a data de fim estiverem vazias,
-    # ou se a data de fim for antes do ano de 2025,então não podemos contar nenhum avo e o resultado é zero.
+    # ou se a data de fim for antes do ano de 2025, então não podemos contar nenhum avo e o resultado é zero (retorna 0 ).
     if pd.isna(inicio) or pd.isna(fim) or fim < pd.Timestamp("2025-01-01"):
         return 0
 
@@ -90,11 +90,11 @@ def processar():
     # Este é o padrão de arquivo que será usado para filtrar os arquivos mostrados. O asterisco (*) é um caractere curinga que significa
     # "qualquer coisa". Portanto, *.xlsx significa "qualquer arquivo com a extensão .xlsx"...
 
-    #  se o usuário não selecionou nenhum arquivo), esta linha fará com que a função atual termine sua execução imediatamente
+    #  se o usuário não selecionou nenhum arquivo, esta linha fará com que a função atual termine sua execução imediatamente
     if not caminho_arquivo:
         return
-# if caminho_arquivo == "":
-#     return 
+# Poderia ser assim também: if caminho_arquivo == "":
+#                                  return 
 
 ################ LENDO O EXCEL  ################
     try:
@@ -107,7 +107,7 @@ def processar():
         
         # CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET 
         
-        
+        # Funçaõ do Pandas que faz a leitura da planilha em excel nesse caso seleciona a aba com nome Geral
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
         
         # Acessa a lista de nomes das colunas do DataFrame table
