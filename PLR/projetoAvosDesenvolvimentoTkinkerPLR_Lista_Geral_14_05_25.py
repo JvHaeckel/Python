@@ -96,7 +96,7 @@ def processar():
 # if caminho_arquivo == "":
 #     return 
 
-################ LENDO O EXCEL  ################
+    ################ LENDO O EXCEL  ################
     try:
         
         # CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET 
@@ -146,106 +146,162 @@ def processar():
         # i - número da linha (índice)
         # row -  informações da linha
         for i, row in table_2025.iterrows():
-            
-            # Essas variáveis estão apenas pegando os valores de cada linha das colunas : Essas variáveis estão apenas pegando os valores das colunas ,
-            # Situação, Retor, Admis, Afastamento e Ultimo dia Ativo.
+
+        # Essas variáveis estão apenas pegando os valores de cada linha das colunas :  Situação, Retor, Admis, Afastamento e Ultimo dia Ativo.
             situacao = row["Situação"]
             retorno = row["Retor."]
             admissao = row["Admis."]
             afastamento = row["Afastamento"]
             ultimo_ativo = row["Ultimo dia Ativo"]
             data_final = data
-            data_incio_ano = pd.Timestamp("2025-01-01") # Coloquei para susbtituir nos IFs aninhados deixando mais claro
-            
+            data_inicio_ano = pd.Timestamp("2025-01-01")  # Coloquei para substituir nos IFs aninhados deixando mais claro
+            atestado = (afastamento - ultimo_ativo).days
+
             if situacao == "A":
-                
-                #   Considerando que a pessoa Ativa tem uma data de Retorno válida, vai contar da data de Início do ano 01/01/25 até o último dia Ativo
-                #   na parte 1 e depois na parte 2 conta do retorno até a data escolhida pelo user
-                
-                # pd.notna(retorno) - verifica se a variável retorno não é nula
-                # pd.notna(ultimo_ativo) - verifica se a variável ultimo_ativo não é nula
-                # retorno >= data_incio_ano -  verifica se as linhas da coluna retorno são maiores ou iguais a ao inicio do ano 01/01/2025
-                if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= data_incio_ano:
-                    
-                    # A parte1 vai chamar a função contar_avos colocando a data de Início do ano ano 2025 e Último dia Ativo
-                    parte1 = contar_avos(data_incio_ano, ultimo_ativo) 
-                   
-                    # A parte2 vai chamar a função contar_avos colocando a data de Retorno e a data escolhida pelo user
-                    parte2 = contar_avos(retorno, data_final)
-                 
-                    # .loc[i, "coluna"] - estamos dizendo linha i, coluna "coluna"
-                    table_2025.loc[i, "Avos Parte 1"] = parte1
-                    table_2025.loc[i, "Avos Parte 2"] = parte2
-                    table_2025.loc[i, "Avos 2025"] = parte1 + parte2
-                    
-                #   Considerando que a pessoa Ativa foi admitida no ano de 2025, calcula da data de Admissão até a data escolhida pelo user
-                 
-                # pd.notna(admissao) -  verifica se a variável não é nula
-                # admissao >= data_incio_ano -  se a data de admissão for maior que a data de de Início do ano 2025
-                elif pd.notna(admissao) and admissao >= data_incio_ano:
-                    avos = contar_avos(admissao, data_final)
-                    table_2025.loc[i, "Avos Parte 1"] = avos
-                    table_2025.loc[i, "Avos Parte 2"] = 0
-                    table_2025.loc[i, "Avos 2025"] = avos
 
-                #   Considerando que a pessoa Ativa 
+                if atestado > 15:
 
-                else:
-                    avos = contar_avos(data_incio_ano, data_final)
-                    table_2025.loc[i, "Avos Parte 1"] = avos
-                    table_2025.loc[i, "Avos Parte 2"] = 0
-                    table_2025.loc[i, "Avos 2025"] = avos
-                    
-# Aqui faz as condições para quando a situação for Afastado (F)
-            elif situacao == "F":
-                if pd.notna(ultimo_ativo) and ultimo_ativo >= data_incio_ano:
-                    avos1 = contar_avos(data_incio_ano, ultimo_ativo)
-                    table_2025.loc[i, "Avos Parte 1"] = avos1
-                else:
-                    avos1 = 0
+                    #   Considerando que a pessoa Ativa tem uma data de Retorno válida, vai contar da data de Início do ano 01/01/25 até o último dia Ativo
+                    #   na parte 1 e depois na parte 2 conta do retorno até a data escolhida pelo user
 
-                if pd.notna(retorno):
-                    avos2 = contar_avos(retorno, data_final)
-                else:
-                    avos2 = 0
+                    # pd.notna(retorno) - verifica se a variável retorno não é nula
+                    # pd.notna(ultimo_ativo) - verifica se a variável ultimo_ativo não é nula
+                    # retorno >= data_inicio_ano -  verifica se as linhas da coluna retorno são maiores ou iguais a ao inicio do ano 01/01/2025
+                    if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= data_inicio_ano:
 
-                table_2025.loc[i, "Avos Parte 2"] = avos2
-                table_2025.loc[i, "Avos 2025"] = avos1 + avos2
+                        # A parte1 vai chamar a função contar_avos colocando a data de Início do ano ano 2025 e Último dia Ativo
+                        parte1 = contar_avos(data_inicio_ano, ultimo_ativo)
 
+                        # A parte2 vai chamar a função contar_avos colocando a data de Retorno e a data escolhida pelo user
+                        parte2 = contar_avos(retorno, data_final)
 
-################ DIAS AFASTADOS ################
+                        # .loc[i, "coluna"] - estamos dizendo linha i, coluna "coluna"
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
 
-        # Criação de Lista ( não foi dicionário e nem tuplas )
-        dias_afastados = []
-        
-        for i, row in table_2025.iterrows():
-            retorno = row["Retor."]
-            ultimo_ativo = row["Ultimo dia Ativo"]
+                    #   Considerando que a pessoa Ativa foi admitida no ano de 2025, calcula da data de Admissão até a data escolhida pelo user
+                    elif pd.notna(admissao) and admissao >= data_inicio_ano:
+                        avos = contar_avos(admissao, data_final)
+                        table_2025.loc[i, "Avos Parte 1"] = avos
+                        table_2025.loc[i, "Avos Parte 2"] = 0
+                        table_2025.loc[i, "Avos 2025"] = avos
+
+                    #   Considerando que a pessoa Ativa
+                    else:
+                        avos = contar_avos(data_inicio_ano, data_final)
+                        table_2025.loc[i, "Avos Parte 1"] = avos
+                        table_2025.loc[i, "Avos Parte 2"] = 0
+                        table_2025.loc[i, "Avos 2025"] = avos
+
+            ###########################################################
+
+                elif atestado <= 15:
+                    if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= data_inicio_ano:
+
+                        # A parte1 vai chamar a função contar_avos colocando a data de Início do ano ano 2025 e o Afastamento
+                        parte1 = contar_avos(data_inicio_ano, afastamento)
+
+                        # A parte2 vai chamar a função contar_avos colocando a data de Retorno e a data escolhida pelo user
+                        parte2 = contar_avos(retorno, data_final)
+
+                        # .loc[i, "coluna"] - estamos dizendo linha i, coluna "coluna"
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+
+                    #   Considerando que a pessoa Ativa foi admitida no ano de 2025, calcula da data de Admissão até a data escolhida pelo user
+                    elif pd.notna(admissao) and admissao >= data_inicio_ano:
+                        avos = contar_avos(admissao, data_final)
+                        table_2025.loc[i, "Avos Parte 1"] = avos
+                        table_2025.loc[i, "Avos Parte 2"] = 0
+                        table_2025.loc[i, "Avos 2025"] = avos
+
+                    #   Considerando que a pessoa Ativa
+                    else:
+                        avos = contar_avos(data_inicio_ano, data_final)
+                        table_2025.loc[i, "Avos Parte 1"] = avos
+                        table_2025.loc[i, "Avos Parte 2"] = 0
+                        table_2025.loc[i, "Avos 2025"] = avos
+
+                        
+                            
+                        
+                     # Aqui faz as condições para quando a situação for Afastado (F)
             
-            # Se o último dia Ativo for nulo , caso sim o núemro de dias = none
-            if pd.isna(ultimo_ativo):
-                dias = None
-                # Se o último dia Ativo não for nulo e a data de Retorno for nula logo
-                # dias = data escolhida do user - ultimo dia ativo
-            elif pd.isna(retorno):
-                dias = (data - ultimo_ativo).days
-                # Se tiver o último dia Ativo não nulo e a data de retorno não nula calcula entre elas
-            else:
-                dias = (retorno - ultimo_ativo).days
-            dias_afastados.append(dias)
+            elif situacao == "F":
+            
+                if atestado > 15:  # atestado = (afastamento - ultimo_ativo).days
+                        
+                            if pd.notna(ultimo_ativo) and ultimo_ativo >= data_inicio_ano:
+                                avos1 = contar_avos(data_inicio_ano, ultimo_ativo)
+                                table_2025.loc[i, "Avos Parte 1"] = avos1
+                            else:
+                                avos1 = 0
 
-        table_2025["Dias Afastados"] = dias_afastados
+                            if pd.notna(retorno):
+                                avos2 = contar_avos(retorno, data_final)
+                            else:
+                                avos2 = 0
 
-        colunas = [
-            "Chapa", "Nome", "Admis.", "Situação",
-            "Ultimo dia Ativo", "Afastamento", "Retor.",
-            "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
-        ]
+                            table_2025.loc[i, "Avos Parte 2"] = avos2
+                            table_2025.loc[i, "Avos 2025"] = avos1 + avos2
 
-        resultado = table_2025[colunas]
 
-        saida = caminho_arquivo.replace(".xlsm", "_RESULTADO.xlsx").replace(".xlsx", "_RESULTADO.xlsx")
-        resultado.to_excel(saida, index=False)
+
+
+                elif atestado <= 15 :
+                            # Modificado dentro da chamada da função contar avos coloquei o : afastamento
+                            if pd.notna(ultimo_ativo) and ultimo_ativo >= data_inicio_ano:
+                                avos1 = contar_avos(data_inicio_ano, afastamento)
+                                table_2025.loc[i, "Avos Parte 1"] = avos1
+                            else:
+                                avos1 = 0
+
+                            if pd.notna(retorno):
+                                avos2 = contar_avos(retorno, data_final)
+                            else:
+                                avos2 = 0
+
+                            table_2025.loc[i, "Avos Parte 2"] = avos2
+                            table_2025.loc[i, "Avos 2025"] = avos1 + avos2
+                    
+                    
+
+
+                        ################ DIAS AFASTADOS ################
+
+            # Criação de Lista ( não foi dicionário e nem tuplas )
+            dias_afastados = []
+            
+            for i, row in table_2025.iterrows():
+                retorno = row["Retor."]
+                ultimo_ativo = row["Ultimo dia Ativo"]
+                
+                # Se o último dia Ativo for nulo , caso sim o núemro de dias = none
+                if pd.isna(ultimo_ativo):
+                    dias = None
+                    # Se o último dia Ativo não for nulo e a data de Retorno for nula logo
+                    # dias = data escolhida do user - ultimo dia ativo
+                elif pd.isna(retorno):
+                    dias = (data - ultimo_ativo).days
+                    # Se tiver o último dia Ativo não nulo e a data de retorno não nula calcula entre elas
+                else:
+                    dias = (retorno - ultimo_ativo).days
+                dias_afastados.append(dias)
+
+            table_2025["Dias Afastados"] = dias_afastados
+
+            colunas = [
+                "Chapa", "Nome", "Admis.", "Situação",
+                "Ultimo dia Ativo", "Afastamento", "Retor.",
+                "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
+            ]
+
+            resultado = table_2025[colunas]
+
+            saida = caminho_arquivo.replace(".xlsm", "_RESULTADO.xlsx").replace(".xlsx", "_RESULTADO.xlsx")
+            resultado.to_excel(saida, index=False)
 
         messagebox.showinfo("Sucesso", f"Arquivo exportado para:\n{saida}")
 
