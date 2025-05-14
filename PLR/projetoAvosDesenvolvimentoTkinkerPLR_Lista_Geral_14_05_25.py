@@ -158,6 +158,10 @@ def processar():
             data_incio_ano = pd.Timestamp("2025-01-01") # Coloquei para susbtituir nos IFs aninhados deixando mais claro
             
             if situacao == "A":
+                
+                #   Considerando que a pessoa Ativa tem uma data de Retorno válida, vai contar da data de Início do ano 01/01/25 até o último dia Ativo
+                #   na parte 1 e depois na parte 2 conta do retorno até a data escolhida pelo user
+                
                 # pd.notna(retorno) - verifica se a variável retorno não é nula
                 # pd.notna(ultimo_ativo) - verifica se a variável ultimo_ativo não é nula
                 # retorno >= data_incio_ano -  verifica se as linhas da coluna retorno são maiores ou iguais a ao inicio do ano 01/01/2025
@@ -173,6 +177,9 @@ def processar():
                     table_2025.loc[i, "Avos Parte 1"] = parte1
                     table_2025.loc[i, "Avos Parte 2"] = parte2
                     table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+                    
+                #   Considerando que a pessoa Ativa foi admitida no ano de 2025, calcula da data de Admissão até a data escolhida pelo user
+                 
                 # pd.notna(admissao) -  verifica se a variável não é nula
                 # admissao >= data_incio_ano -  se a data de admissão for maior que a data de de Início do ano 2025
                 elif pd.notna(admissao) and admissao >= data_incio_ano:
@@ -180,6 +187,8 @@ def processar():
                     table_2025.loc[i, "Avos Parte 1"] = avos
                     table_2025.loc[i, "Avos Parte 2"] = 0
                     table_2025.loc[i, "Avos 2025"] = avos
+
+                #   Considerando que a pessoa Ativa 
 
                 else:
                     avos = contar_avos(data_incio_ano, data_final)
