@@ -166,9 +166,15 @@ def processar():
                     # ATIVOS admitidos em 2025 que não tiveram Último dia Ativo e Afastamento
                     if  pd.isna(ultimo_ativo) and pd.isna(afastamento):
                        
+                       # A parte1 calcula da Admissão ou Início do Ano até o Último dia Ativo ou Afastamento a depender da condição.
+                       # A parte2 calcula do Retorno (se houver) até a data que o user pediu.
+                       
                         # Avos da admissão de 2025 até a data do input do usuário
                         parte1 = contar_avos(admissao, data_final) 
                         parte2 = 0
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                
                      # ATIVOS admitidos em 2025 que tiveram afastamento com retorno no ano de 2025
                     elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
@@ -180,9 +186,15 @@ def processar():
                         if atestado <= 15 :
                             parte1 = contar_avos(admissao, afastamento)
                             parte2 = contar_avos(retorno, data_final)
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                         else:
                             parte1 = contar_avos(admissao, ultimo_ativo)
                             parte2 = contar_avos(retorno, data_final)
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                     
                 # ATIVOS admitidos ANTES de 2025
                 else:
@@ -192,114 +204,90 @@ def processar():
                         # Avos da data de Início do ano de 2025 até a data do input do usuário
                         parte1 = contar_avos(data_incio_ano, data_final) 
                         parte2 = 0
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                
                      # ATIVOS admitidos ANTES de 2025 que tiveram afastamento com retorno no ano de 2025
                     elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
                         atestado = (afastamento - ultimo_ativo).days
                         
-                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for maior ou igual a 15 dias
+                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for menor ou igual a 15 dias
                         # significa que botou atestado, logo a pessoa está coberta pela lei e assim temos que considerar
                         # que a conta precisa usar o Afastamento no lugar de Ultimo dia Ativo
                         if atestado <= 15 :
                             parte1 = contar_avos(data_incio_ano, afastamento)
                             parte2 = contar_avos(retorno, data_final)
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                         else:
                             parte1 = contar_avos(data_incio_ano, ultimo_ativo)
                             parte2 = contar_avos(retorno, data_final)
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                  
                    
+                      ########################### Calculando para os AFASTADOS ############################################         
                    
-                      #######################################################################
-                    # Calculando para os AFASTADOS    
             elif situacao == 'F':
                 
                   # AFASTADOS admitidos em 2025
                 if admissao >= data_incio_ano:
                     
-                     # AFASTADOS admitidos em 2025 que tiveram afastamento com retorno no ano de 2025
-                    if pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
+                     # AFASTADOS admitidos em 2025 (Não tem retorno)
+                    if pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.isna(retorno):
                         atestado = (afastamento - ultimo_ativo).days
                         
-                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for maior ou igual a 15 dias
+                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for menor ou igual a 15 dias
                         # significa que botou atestado, logo a pessoa está coberta pela lei e assim temos que considerar
                         # que a conta precisa usar o Afastamento no lugar de Ultimo dia Ativo
                         if atestado <= 15 :
+                            
+                            # A parte1 calcula da admissão até o Afastamento 
+                            # A parte2 calcula do Retorno até a data que o user pediu, mas como não existe retorno ficará zerado
                             parte1 = contar_avos(admissao, afastamento)
-                            parte2 = contar_avos(retorno, data_final)
+                            parte2 = 0
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                         else:
+                            # A parte1 calcula da admissão até o Último dia Ativo 
+                            # A parte2 calcula do Retorno até a data que o user pediu, mas como não existe retorno ficará zerado
                             parte1 = contar_avos(admissao, ultimo_ativo)
-                            parte2 = contar_avos(retorno, data_final)
+                            parte2 = 0
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2        
                     
-                # AFASTADOS admitidos ANTES de 2025
+                    # AFASTADOS admitidos ANTES de 2025     
+                      
+                   # Poderia colocar isso também: elif  admissao <= data_incio_ano:
                 else:
-                     # AFASTADOS admitidos ANTES de 2025 que não tiveram Último dia Ativo e Afastamento
-                    if  pd.isna(ultimo_ativo) and pd.isna(afastamento):
-                       
-                        # Avos da data de Início do ano de 2025 até a data do input do usuário
-                        parte1 = contar_avos(data_incio_ano, data_final) 
-                        parte2 = 0
+                    
                
-                     # AFASTADOS admitidos ANTES de 2025 que tiveram afastamento com retorno no ano de 2025
-                    elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
+                     # AFASTADOS admitidos ANTES de 2025 que tiveram afastamento no ano de 2025
+                    if pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.isna(retorno) :
                         atestado = (afastamento - ultimo_ativo).days
                         
-                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for maior ou igual a 15 dias
+                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for menor ou igual a 15 dias
                         # significa que botou atestado, logo a pessoa está coberta pela lei e assim temos que considerar
                         # que a conta precisa usar o Afastamento no lugar de Ultimo dia Ativo
                         if atestado <= 15 :
                             parte1 = contar_avos(data_incio_ano, afastamento)
-                            parte2 = contar_avos(retorno, data_final)
+                            parte2 = 0
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                         else:
                             parte1 = contar_avos(data_incio_ano, ultimo_ativo)
-                            parte2 = contar_avos(retorno, data_final)
+                            parte2 = 0
+                            table_2025.loc[i, "Avos Parte 1"] = parte1
+                            table_2025.loc[i, "Avos Parte 2"] = parte2
+                            table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                 
                 
-                # pd.notna(retorno) - verifica se a variável retorno não é nula
-                # pd.notna(ultimo_ativo) - verifica se a variável ultimo_ativo não é nula
-                # retorno >= data_incio_ano -  verifica se as linhas da coluna retorno são maiores ou iguais a ao inicio do ano 01/01/2025
-                if pd.notna(retorno) and pd.notna(ultimo_ativo) and retorno >= data_incio_ano:
-                    
-                    # A parte1 vai chamar a função contar_avos colocando a data de Início do ano ano 2025 e Último dia Ativo
-                    parte1 = contar_avos(data_incio_ano, ultimo_ativo) 
-                   
-                    # A parte2 vai chamar a função contar_avos colocando a data de Retorno e a data escolhida pelo user
-                    parte2 = contar_avos(retorno, data_final)
-                 
-                    # .loc[i, "coluna"] - estamos dizendo linha i, coluna "coluna"
-                    table_2025.loc[i, "Avos Parte 1"] = parte1
-                    table_2025.loc[i, "Avos Parte 2"] = parte2
-                    table_2025.loc[i, "Avos 2025"] = parte1 + parte2
-                # pd.notna(admissao) -  verifica se a variável não é nula
-                # admissao >= data_incio_ano -  se a data de admissão for maior que a data de de Início do ano 2025
-                elif pd.notna(admissao) and admissao >= data_incio_ano:
-                    avos = contar_avos(admissao, data_final)
-                    table_2025.loc[i, "Avos Parte 1"] = avos
-                    table_2025.loc[i, "Avos Parte 2"] = 0
-                    table_2025.loc[i, "Avos 2025"] = avos
-
-                else:
-                    avos = contar_avos(data_incio_ano, data_final)
-                    table_2025.loc[i, "Avos Parte 1"] = avos
-                    table_2025.loc[i, "Avos Parte 2"] = 0
-                    table_2025.loc[i, "Avos 2025"] = avos
-                    
-# Aqui faz as condições para quando a situação for Afastado (F)
-            elif situacao == "F":
-                if pd.notna(ultimo_ativo) and ultimo_ativo >= data_incio_ano:
-                    avos1 = contar_avos(data_incio_ano, ultimo_ativo)
-                    table_2025.loc[i, "Avos Parte 1"] = avos1
-                else:
-                    avos1 = 0
-
-                if pd.notna(retorno):
-                    avos2 = contar_avos(retorno, data_final)
-                else:
-                    avos2 = 0
-
-                table_2025.loc[i, "Avos Parte 2"] = avos2
-                table_2025.loc[i, "Avos 2025"] = avos1 + avos2
-
-
 ################ DIAS AFASTADOS ################
 
         # Criação de Lista ( não foi dicionário e nem tuplas )
