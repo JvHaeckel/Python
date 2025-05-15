@@ -157,7 +157,103 @@ def processar():
             data_final = data
             data_incio_ano = pd.Timestamp("2025-01-01") # Coloquei para susbtituir nos IFs aninhados deixando mais claro
             
+            # Calculando primeiramente para os ATIVOS 
             if situacao == "A":
+                
+                # ATIVOS admitidos em 2025
+                if admissao >= data_incio_ano:
+                    
+                    # ATIVOS admitidos em 2025 que não tiveram Último dia Ativo e Afastamento
+                    if  pd.isna(ultimo_ativo) and pd.isna(afastamento):
+                       
+                        # Avos da admissão de 2025 até a data do input do usuário
+                        parte1 = contar_avos(admissao, data_final) 
+                        parte2 = 0
+               
+                     # ATIVOS admitidos em 2025 que tiveram afastamento com retorno no ano de 2025
+                    elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
+                        atestado = (afastamento - ultimo_ativo).days
+                        
+                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for maior ou igual a 15 dias
+                        # significa que botou atestado, logo a pessoa está coberta pela lei e assim temos que considerar
+                        # que a conta precisa usar o Afastamento no lugar de Ultimo dia Ativo
+                        if atestado <= 15 :
+                            parte1 = contar_avos(admissao, afastamento)
+                            parte2 = contar_avos(retorno, data_final)
+                        else:
+                            parte1 = contar_avos(admissao, ultimo_ativo)
+                            parte2 = contar_avos(retorno, data_final)
+                    
+                # ATIVOS admitidos ANTES de 2025
+                else:
+                     # ATIVOS admitidos ANTES de 2025 que não tiveram Último dia Ativo e Afastamento
+                    if  pd.isna(ultimo_ativo) and pd.isna(afastamento):
+                       
+                        # Avos da data de Início do ano de 2025 até a data do input do usuário
+                        parte1 = contar_avos(data_incio_ano, data_final) 
+                        parte2 = 0
+               
+                     # ATIVOS admitidos ANTES de 2025 que tiveram afastamento com retorno no ano de 2025
+                    elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
+                        atestado = (afastamento - ultimo_ativo).days
+                        
+                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for maior ou igual a 15 dias
+                        # significa que botou atestado, logo a pessoa está coberta pela lei e assim temos que considerar
+                        # que a conta precisa usar o Afastamento no lugar de Ultimo dia Ativo
+                        if atestado <= 15 :
+                            parte1 = contar_avos(data_incio_ano, afastamento)
+                            parte2 = contar_avos(retorno, data_final)
+                        else:
+                            parte1 = contar_avos(data_incio_ano, ultimo_ativo)
+                            parte2 = contar_avos(retorno, data_final)
+                 
+                   
+                   
+                      #######################################################################
+                    # Calculando para os AFASTADOS    
+            elif situacao == 'F':
+                
+                  # AFASTADOS admitidos em 2025
+                if admissao >= data_incio_ano:
+                    
+                     # AFASTADOS admitidos em 2025 que tiveram afastamento com retorno no ano de 2025
+                    if pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
+                        atestado = (afastamento - ultimo_ativo).days
+                        
+                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for maior ou igual a 15 dias
+                        # significa que botou atestado, logo a pessoa está coberta pela lei e assim temos que considerar
+                        # que a conta precisa usar o Afastamento no lugar de Ultimo dia Ativo
+                        if atestado <= 15 :
+                            parte1 = contar_avos(admissao, afastamento)
+                            parte2 = contar_avos(retorno, data_final)
+                        else:
+                            parte1 = contar_avos(admissao, ultimo_ativo)
+                            parte2 = contar_avos(retorno, data_final)
+                    
+                # AFASTADOS admitidos ANTES de 2025
+                else:
+                     # AFASTADOS admitidos ANTES de 2025 que não tiveram Último dia Ativo e Afastamento
+                    if  pd.isna(ultimo_ativo) and pd.isna(afastamento):
+                       
+                        # Avos da data de Início do ano de 2025 até a data do input do usuário
+                        parte1 = contar_avos(data_incio_ano, data_final) 
+                        parte2 = 0
+               
+                     # AFASTADOS admitidos ANTES de 2025 que tiveram afastamento com retorno no ano de 2025
+                    elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) and retorno >= data_incio_ano:
+                        atestado = (afastamento - ultimo_ativo).days
+                        
+                        # Se a diferenca de dias entre o Afastamento e Ultimo dia Ativo for maior ou igual a 15 dias
+                        # significa que botou atestado, logo a pessoa está coberta pela lei e assim temos que considerar
+                        # que a conta precisa usar o Afastamento no lugar de Ultimo dia Ativo
+                        if atestado <= 15 :
+                            parte1 = contar_avos(data_incio_ano, afastamento)
+                            parte2 = contar_avos(retorno, data_final)
+                        else:
+                            parte1 = contar_avos(data_incio_ano, ultimo_ativo)
+                            parte2 = contar_avos(retorno, data_final)
+                
+                
                 # pd.notna(retorno) - verifica se a variável retorno não é nula
                 # pd.notna(ultimo_ativo) - verifica se a variável ultimo_ativo não é nula
                 # retorno >= data_incio_ano -  verifica se as linhas da coluna retorno são maiores ou iguais a ao inicio do ano 01/01/2025
