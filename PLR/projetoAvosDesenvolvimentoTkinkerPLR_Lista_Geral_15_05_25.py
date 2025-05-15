@@ -126,13 +126,7 @@ def processar():
         table["Retor."] = pd.to_datetime(table["Retor."], errors='coerce')
         table["Admis."] = pd.to_datetime(table["Admis."], errors='coerce')
 
-
-       # FILTRAGEM - filtra as linhas do DATAFRAME tabel para as colunas de datas de acordo com o ano de 2025 e a Situação de ATIVO (A). 
-        table_2025 = table[
-            (table["Afastamento"].dt.year == 2025) |
-            (table["Retor."].dt.year == 2025) |
-            (table["Ultimo dia Ativo"].dt.year == 2025)
-        ].copy()
+        table_2025 = table.copy()
         # Vamos extrair o ano para cada coluna que tem as datas. 
         # copy() - criamos uma cópia para não modificar o DATAFRAME original evitando o aviso de "SettingWithCopyWarning"
 
@@ -314,7 +308,7 @@ def processar():
         colunas = [
             "Chapa", "Nome", "Admis.", "Situação",
             "Ultimo dia Ativo", "Afastamento", "Retor.",
-            "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
+            "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025" ,  "Avos verificados Manualmente"
         ]
 
         resultado = table_2025[colunas]
