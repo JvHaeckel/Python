@@ -310,21 +310,29 @@ def processar():
 
        
        
-    
+
 
 ################ Interface gráfica ################
 
+# Função para limpar o placeholder: 
+def limpar_placeholder(event):
+    if entrada_data.get() == "dd/mm/aaaa":
+        entrada_data.delete(0, tk.END)
+
 janela = tk.Tk()
 janela.geometry("400x220")
-janela.title("Cálculo de Avos 2025")
+janela.title("Cálculo de Avos")
 
-tk.Label(janela, text="Digite a data que deseja (Dia/Mês/Ano):").pack(pady=(20, 5))
+# Título maior e em negrito
+tk.Label(janela, text="Cálculo de Avos 2025", font=("Helvetica", 14, "bold")).pack(pady=(10, 15))
 entrada_data = tk.Entry(janela, width=20)
+entrada_data.insert(0, "dd/mm/aaaa")  # Preenche o campo com o formato
+entrada_data.bind("<FocusIn>", limpar_placeholder)  # Remove o placeholder ao clicar
 entrada_data.pack()
 
-tk.Label(janela, text="Clique abaixo para escolher o arquivo Excel:").pack(pady=(20, 5))
+tk.Label(janela, text="Escolha o arquivo apenas em Excel:", font=("Helvetica", 12, "bold")).pack(pady=(20, 5))
 
-botao = tk.Button(janela, text="Calcular Avos", command=processar)
+botao = tk.Button(janela, text="Calcular Avos", command=processar, font=("Helvetica", 10, "bold"))
 botao.pack(pady=10)
 
 janela.mainloop()
