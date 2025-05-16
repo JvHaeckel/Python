@@ -93,10 +93,10 @@ def processar():
     #  se o usuário não selecionou nenhum arquivo, esta linha fará com que a função atual termine sua execução imediatamente
     if not caminho_arquivo:
         return
-# Poderia ser assim também: if caminho_arquivo == "":
-#                                  return 
+  # Poderia ser assim também: if caminho_arquivo == "":
+   #                                  return 
 
-################ LENDO O EXCEL  ################
+  ################ LENDO O EXCEL  ################
     try:
         
         # CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET  CUIDADO COM O SHEET 
