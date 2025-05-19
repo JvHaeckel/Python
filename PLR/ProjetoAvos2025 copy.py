@@ -60,6 +60,8 @@ def contar_avos(inicio, fim):
 
 def processar():
      
+     
+     
      # Pegar a data que o usuário digitou na tela, na parte do Tkinter
     data_input = entrada_data.get()
 
@@ -74,6 +76,8 @@ def processar():
     except Exception:
         messagebox.showerror("Erro", "Data inválida. Use o formato DD/MM/AAAA.")
         return
+
+ ################ Pegando Documento da Interface  ################
 
     # Essa parte do código em Python utiliza a biblioteca tkinter (através do módulo filedialog) para abrir
     # uma janela de diálogo que permite ao usuário selecionar um arquivo Excel.
