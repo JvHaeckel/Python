@@ -12,8 +12,3 @@ bus = {
 for chave, valor in bus.items():
    
         print(chave , ':' , valor) 
-
-
-
-
-
