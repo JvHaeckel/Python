@@ -1,26 +1,17 @@
 
-# Percorrendo um dicionário (chaves)
-
-
-people = {
-    'nome': ['Ana', 'Daniele' , 'Flavia', 'Thay'],
-    'idade': [23 , 33 , 35 , 22 ],
-    'altura': [ 165, 168, 162, 163 ]
-}
-
-# print(people)
-
+# Percorrendo um dicionário (chaves e valores)
+# Por que isso é útil?
+# Acessar e trabalhar com cada dado dentro de um dicionário sem precisar saber antecipadamente quais são as chaves.
 
 bus = {
     'linha' : ['2050', '2040' , '2060' ],
     'origem': [ 'TI Camaragibe', 'TI Várzea', 'TI Abreu'],
-    'destino': ['São louenco', 'Federal', 'Litoral']
+    'destino': ['São Lourenço', 'Federal', 'Litoral']
 }
 
-
-# print(bus)
-
-print(bus['destino'])
+for chave, valor in bus.items():
+   
+        print(chave , ':' , valor) 
 
 
 
