@@ -99,6 +99,7 @@ def processar():
    ################ LENDO O EXCEL  ################
     try:
         
+
         # ATENÇÃO: Verifique se o nome da aba está correto (neste caso, "Geral")
 
         # A função read_excel do pandas lê a planilha do Excel e retorna um DataFrame
@@ -267,7 +268,6 @@ def processar():
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
        
-    
        ################ DIAS AFASTADOS ################
 
         # Criação de Lista ( não foi dicionário e nem tuplas )
@@ -295,7 +295,7 @@ def processar():
         colunas = [
                 "Chapa", "Nome", "Admis.", "Situação",
                 "Ultimo dia Ativo", "Afastamento", "Retor.",
-                "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
+                "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025", "Avos verificados Manualmente"
             ]
 
         resultado = table_2025[colunas]
@@ -307,6 +307,9 @@ def processar():
 
     except Exception as e:
             messagebox.showerror("Erro", f"Erro ao processar o arquivo:\n{e}")
+
+       
+       
 
 
 ################ Interface gráfica ################
