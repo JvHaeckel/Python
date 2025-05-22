@@ -217,10 +217,7 @@ def processar():
                             table_2025.loc[i, "Avos Parte 2"] = parte2
                             table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                             
-                            
-                            # ******** Verificar essa condição ********   ******** Verificar essa condição ********  ******** Verificar essa condição ********
-                            
-                         # ATIVOS admitidos ANTES de 2025 que tiveram Afastamento em 2025 sem Retorno(0) no ano de 2025      ******** Verificar essa condição ********       
+                         # ATIVOS admitidos ANTES de 2025 que tiveram Afastamento em 2025 sem Retorno(0) no ano de 2025      ******** OK ********     
                     elif  afastamento >= data_inicio_ano and pd.isna(retorno):
                         
                         parte1 = contar_avos(data_inicio_ano, afastamento)
@@ -229,7 +226,7 @@ def processar():
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                         
-                        # Ativos admitidos antes de 2025 que tiveram seu último dia ativo antes de 2025 com Afastamento em 2025 e Retorno em 2025
+                        # Ativos admitidos antes de 2025 que tiveram seu último dia ativo antes de 2025 com Afastamento em 2025 e Retorno em 2025  ******** OK ********
                     elif ultimo_ativo < data_inicio_ano and afastamento >= data_inicio_ano and retorno >= data_inicio_ano:
                         
                         parte1 = contar_avos(data_inicio_ano, afastamento)
@@ -242,10 +239,11 @@ def processar():
             
             elif situacao == 'F':
 
-                # AFASTADOS admitidos em 2025
+                # AFASTADOS admitidos EM 2025
+                
                 if pd.notna(admissao) and admissao >= data_inicio_ano:
                     
-                    # AFASTADOS admitidos em 2025 com Afastamento e sem Retorno                                        ******** OK ********
+                    # AFASTADOS admitidos em 2025 com Afastamento em 2025 e sem Retorno                                        ******** OK ********
                     if pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.isna(retorno):
                         
                         # A parte1 calcula da admissão até o Afastamento 
@@ -264,9 +262,9 @@ def processar():
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                         
-                # AFASTADOS admitidos ANTES de 2025     
+                   # AFASTADOS admitidos ANTES de 2025     
 
-                # Poderia colocar isso mais aconselhável também: elif  admissao <= data_inicio_ano:
+                   # Poderia colocar isso mais aconselhável também: elif  admissao <= data_inicio_ano:
                 else:
 
                     # AFASTADOS admitidos ANTES de 2025 que tiveram afastamento no ano de 2025 com retorno no ano de 2025   ******** OK ********
