@@ -295,7 +295,7 @@ def processar():
         colunas = [
                 "Chapa", "Nome", "Admis.", "Situação",
                 "Ultimo dia Ativo", "Afastamento", "Retor.",
-                "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025", "Avos verificados Manualmente"
+                "Dias Afastados", "Avos Parte 1", "Avos Parte 2", "Avos 2025"
             ]
 
         resultado = table_2025[colunas]
