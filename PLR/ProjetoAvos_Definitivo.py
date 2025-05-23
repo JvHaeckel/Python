@@ -3,6 +3,7 @@ from pandas.tseries.offsets import MonthEnd
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
+from datetime import datetime
 
 # Função para contar avos válidos no ano de 2025
 def contar_avos(inicio, fim):
@@ -36,7 +37,7 @@ def processar():
     try:
         data = pd.to_datetime(data_input, dayfirst=True)
     except Exception:
-        messagebox.showerror("Erro", "Data inválida. Use o formato DD/MM/AAAA.")
+        messagebox.showerror("Erro", "Data inválida. Use o formato DD/MM/AAAA ou DD-MM-AA")
         return
 
     caminho_arquivo = filedialog.askopenfilename(
@@ -49,7 +50,11 @@ def processar():
         return
 
     try:
-        # Lendo a aba "Geral" para o cálculo de Avos
+       
+        # Lendo a aba "Geral" para o cálculo de Avos Mudar depois para ficar sem ABA  # Lendo a aba "Geral" para o cálculo de Avos Mudar depois para ficar sem ABA
+        
+        # Lendo a aba "Geral" para o cálculo de Avos Mudar depois para ficar sem ABA  # Lendo a aba "Geral" para o cálculo de Avos Mudar depois para ficar sem ABA
+        
         table = pd.read_excel(caminho_arquivo, sheet_name="Geral")
         table.columns = table.columns.str.strip()
 
@@ -225,22 +230,28 @@ def processar():
 ################ Interface gráfica ################
 
 def limpar_placeholder(event):
+    
+    # Criei variável para colocar a data de Hoje (data do teste)
+    data_hoje = datetime.today().strftime('%d/%m/%Y')
     if entrada_data.get() == "dd/mm/aaaa":
         entrada_data.delete(0, tk.END)
+        entrada_data.insert(0,data_hoje)
 
 janela = tk.Tk()
 janela.geometry("400x220")
-janela.title("Cálculo de Avos e Faltantes")
+janela.title("Cálculo de Avos powered by Mobi")
 
-tk.Label(janela, text="Cálculo de Avos e Faltantes 2025", font=("Helvetica", 14, "bold")).pack(pady=(10, 15))
-entrada_data = tk.Entry(janela, width=20)
+tk.Label(janela, text="Cálculo de Avos", font=("Helvetica", 14, "bold")).pack(pady=(10, 15))
+
+entrada_data = tk.Entry(janela, width=15, font=("Helvetica", 13))
+
 entrada_data.insert(0, "dd/mm/aaaa")
 entrada_data.bind("<FocusIn>", limpar_placeholder)
 entrada_data.pack()
 
-tk.Label(janela, text="Escolha o arquivo Excel:", font=("Helvetica", 12, "bold")).pack(pady=(20, 5))
+tk.Label(janela, text="Escolha o arquivo em Excel:", font=("Helvetica", 12, "bold")).pack(pady=(20, 5))
 
-botao = tk.Button(janela, text="Processar Arquivo", command=processar, font=("Helvetica", 10, "bold"))
+botao = tk.Button(janela, text="Calcular", command=processar, font=("Helvetica", 10, "bold"))
 botao.pack(pady=10)
 
 janela.mainloop()
