@@ -110,16 +110,27 @@ def processar():
                          # Ativos admitidos antes de 2025
                 elif admissao <= data_inicio_ano:
 
-                    # Ativos admitidos antes de 2025 que não tiveram afastamento terão 4 avos
+                    # Ativos admitidos antes de 2025 que não tiveram Afastamento terão 4 avos
                     if pd.isna(ultimo_ativo) and pd.isna(afastamento):
+
                         parte1 = contar_avos(data_inicio_ano, data_final)
                         parte2 = 0
                         table_2025.loc[i, "Avos Parte 1"] = parte1
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
-                        
+                    
+                    # Ativos admitidos antes de 2025 que não tiveram Ultimo dia ativo e nem Afastamento mas com Retorno em 2025
+                    elif pd.isna(ultimo_ativo) and pd.isna(afastamento) and data_inicio_ano <= retorno <= data_fim_ano:
+                        parte1 = 0
+                        parte2 = contar_avos(retorno, data_final)
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+
                         ########### EDITANDO AQUI ############################
+                        # Ativos admitidos antes de 2025 que possuem ultimo dia ativo, Afastamento e Retorno
                     elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.notna(retorno) :
+                        
                         if ultimo_ativo < data_inicio_ano and afastamento < data_inicio_ano and retorno <= data_inicio_ano:
                             # Para as pessoas Ativas admitidas antes de 2025 com Ultimo dia Ativo, Afastamento e Retorno antes de 2025 
                             # o cálculo de avos fica da data de início do ano até a data de Input ( 4 avos)
@@ -129,8 +140,10 @@ def processar():
                             table_2025.loc[i, "Avos Parte 2"] = parte2
                             table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                             
+
+                                #OKOKOKOKOKOKOKOKOKOKOKOKOKOK#
                         elif  ultimo_ativo < data_inicio_ano and afastamento < data_inicio_ano and retorno >= data_inicio_ano:
-                            # Para as pessoas Ativas admitidas antes de 2025 com Ultimo dia Ativo, Afastamento antes de 2025 e Retorno em 2025 
+                            # Para as pessoas Ativas admitidas antes de 2025 com Ultimo dia Ativo antes de 2025, Afastamento antes de 2025 e Retorno em 2025 
                             # o cálculo de avos fica da data de Retorno até a data Atual
                             parte1 = 0
                             parte2 = contar_avos(retorno, data_final)
@@ -138,6 +151,7 @@ def processar():
                             table_2025.loc[i, "Avos Parte 2"] = parte2
                             table_2025.loc[i, "Avos 2025"] = parte1 + parte2 
                             
+                                #OKOKOKOKOKOKOKOKOKOKOKOKOKOK#
                             # Para as pessoas Ativas admitidas antes de 2025 com Ultimo dia Ativo antes de 2025 ,com Afastamento em 2025 e Retorno
                             # em 2025, o cálculo de avos fica da data de inicio do ano até o Afastamento e depois do Retorno até a data de Input.
                         elif ultimo_ativo < data_inicio_ano and afastamento >= data_inicio_ano and retorno >= data_inicio_ano:
@@ -147,6 +161,8 @@ def processar():
                             table_2025.loc[i, "Avos Parte 2"] = parte2
                             table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                             
+                            #OKOKOKOKOKOKOKOKOKOKOKOKOKOK#
+
                          # Para as pessoas Ativas admitidas antes de 2025 com Ultimo dia Ativo em 2025 ,com Afastamento em 2025 e Retorno
                             # em 2025 o cálculo de avos fica da data de inicio do ano até o Afastamento e depois do Retorno até a data de Input.
                         elif ultimo_ativo >= data_inicio_ano and afastamento >= data_inicio_ano and retorno >= data_inicio_ano:
@@ -155,15 +171,21 @@ def processar():
                             table_2025.loc[i, "Avos Parte 1"] = parte1
                             table_2025.loc[i, "Avos Parte 2"] = parte2
                             table_2025.loc[i, "Avos 2025"] = parte1 + parte2    
+
+
+                            #  AQUI FOI EDITADO: VERIFICAR - essa condição não existe ainda
                             
                             # Pessoas Ativas admitidas antes de 2025 com último dia Ativo e Afastamento em 2025 e sem retorno
-                            # o avos vai ficar da data de inicio ano até o afastamento
-                    elif afastamento >= data_inicio_ano and pd.isna(retorno):
+                            # o avos vai ficar da data de inicio ano até o afastamento. Essa condição tem que obdecer ao If de cima
+                            # pq acima ele dizia que não tinha afastamento
+                    elif ultimo_ativo >= data_inicio_ano and  afastamento >= data_inicio_ano and pd.isna(retorno):
                         parte1 = contar_avos(data_inicio_ano, afastamento)
                         parte2 = 0
                         table_2025.loc[i, "Avos Parte 1"] = parte1
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+
+                    # REDUNDÂNCIA - ESTÁ REDUNDANTE E PODE SER APAGADO
                     elif ultimo_ativo < data_inicio_ano and afastamento >= data_inicio_ano and retorno >= data_inicio_ano:
                         parte1 = contar_avos(data_inicio_ano, afastamento)
                         parte2 = contar_avos(retorno, data_final)
@@ -173,35 +195,83 @@ def processar():
                         
                         
                         
-                        
+                        # Verificando aqui
             elif situacao == 'F':
+
+                # Afastados admitidos no ano de 2025
                 if pd.notna(admissao) and admissao >= data_inicio_ano:
+
+                     # Afastados admitidos em 2025 sem Retorno, logo os avos serão da data de Admissão até o Afastamento
                     if pd.notna(ultimo_ativo) and pd.notna(afastamento) and pd.isna(retorno):
                         parte1 = contar_avos(admissao, afastamento)
                         parte2 = 0
                         table_2025.loc[i, "Avos Parte 1"] = parte1
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
-                    else:
+
+                    else: # FALTANTES Verificar
+                         # Afastados admitidos em 2025 com Retorno, logo os avos serão da data de Admissão até o Afastamento, e depois do 
+                         # retorno até a Data Final (Não faz sentido ter retorno pq o status é de Afastado, logo essa lógica precisa ser
+                         # colocada para os FALTANTES )
+
                         parte1 = contar_avos(admissao, afastamento)
                         parte2 = contar_avos(retorno, data_final)
                         table_2025.loc[i, "Avos Parte 1"] = parte1
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
-                else:
-                    if (pd.notna(ultimo_ativo) and pd.notna(afastamento) and
-                        afastamento >= data_inicio_ano and pd.notna(retorno) and retorno >= data_inicio_ano):
-                        parte1 = contar_avos(data_inicio_ano, afastamento)
-                        parte2 = contar_avos(retorno, data_final)
-                        table_2025.loc[i, "Avos Parte 1"] = parte1
-                        table_2025.loc[i, "Avos Parte 2"] = parte2
-                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
-                    elif pd.notna(ultimo_ativo) and pd.notna(afastamento) and afastamento >= data_inicio_ano and pd.isna(retorno):
+
+                        # Afastados admitidos antes de 2025
+                elif pd.nota(admissao) and admissao < data_inicio_ano: 
+
+                         #OKKKKKKK
+                    # Afastados admitidos antes de 2025 com Ultimo dia Ativo em 2025 e Afastamento em 2025 e sem Retorno(F)
+                    if pd.notna(ultimo_ativo) and ultimo_ativo >= data_inicio_ano and pd.notna(afastamento) and afastamento >= data_inicio_ano and pd.isna(retorno):
                         parte1 = contar_avos(data_inicio_ano, afastamento)
                         parte2 = 0
                         table_2025.loc[i, "Avos Parte 1"] = parte1
                         table_2025.loc[i, "Avos Parte 2"] = parte2
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+
+                        #OKKKKKKK
+                     # Afastados admitidos antes de 2025, com ultimo dia ativo antes de 2025, Afastamento em 2025 e sem Retorno(F)
+                    elif pd.notna(ultimo_ativo) and ultimo_ativo < data_inicio_ano and afastamento >= data_inicio_ano and pd.isna(retorno):
+                        parte1 = (data_inicio_ano, afastamento)
+                        parte2 = 0
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+
+                        #OKKKKKKK
+                        # Coloquei essa condição e talvez seja redundante mas irei deixar mesmo assim
+                        # Afastados admitidos antes de 2025 com ultimo dia ativo antes de 2025, Afastamento antes de 2025 e sem Retorno(F), todos os avos serão Zerados
+                    elif pd.notna(ultimo_ativo) and ultimo_ativo < data_inicio_ano and afastamento < data_inicio_ano and pd.isna(retorno):
+                        parte1 = 0
+                        parte2 = 0
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+
+                         # FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES
+                         # FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES FALTANTES
+
+                         # Afastados admitidos antes de 2025 com Afastamento em 2025 e Retorno em 2025 (Não faz sentido ter retorno pq o status é de Afastado, 
+                         # logo essa lógica precisa ser colocada para os FALTANTES )
+
+                    elif (pd.notna(ultimo_ativo) and pd.notna(afastamento) and afastamento >= data_inicio_ano and pd.notna(retorno) and retorno >= data_inicio_ano):
+                        parte1 = contar_avos(data_inicio_ano, afastamento)
+                        parte2 = contar_avos(retorno, data_final)
+                        table_2025.loc[i, "Avos Parte 1"] = parte1
+                        table_2025.loc[i, "Avos Parte 2"] = parte2
+                        table_2025.loc[i, "Avos 2025"] = parte1 + parte2
+                    
+                        
+
+                        
+                        
+                        
+
+
+                    
 
         dias_afastados = []
         for i, row in table_2025.iterrows():
