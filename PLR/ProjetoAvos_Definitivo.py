@@ -221,7 +221,7 @@ def processar():
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
 
                         # Afastados admitidos antes de 2025
-                elif pd.nota(admissao) and admissao < data_inicio_ano: 
+                elif pd.notna(admissao) and admissao < data_inicio_ano: 
 
                          #OKKKKKKK
                     # Afastados admitidos antes de 2025 com Ultimo dia Ativo em 2025 e Afastamento em 2025 e sem Retorno(F)
@@ -235,7 +235,7 @@ def processar():
                         #OKKKKKKK
                      # Afastados admitidos antes de 2025, com ultimo dia ativo antes de 2025, Afastamento em 2025 e sem Retorno(F)
                     elif pd.notna(ultimo_ativo) and ultimo_ativo < data_inicio_ano and afastamento >= data_inicio_ano and pd.isna(retorno):
-                        parte1 = (data_inicio_ano, afastamento)
+                        parte1 = contar_avos(data_inicio_ano, afastamento)
                         parte2 = 0
                         table_2025.loc[i, "Avos Parte 1"] = parte1
                         table_2025.loc[i, "Avos Parte 2"] = parte2
@@ -265,14 +265,6 @@ def processar():
                         table_2025.loc[i, "Avos 2025"] = parte1 + parte2
                     
                         
-
-                        
-                        
-                        
-
-
-                    
-
         dias_afastados = []
         for i, row in table_2025.iterrows():
             retorno = row["Retor."]
