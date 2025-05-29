@@ -1,3 +1,8 @@
+# Retirar a aba Geral e deixar para ler planilha única
+# Colocar opção para a pessoa escolher o ano ou considerar o cálculo dos avos para ano vingente usando algo como "TODAY"
+
+
+
 import pandas as pd
 from pandas.tseries.offsets import MonthEnd
 import tkinter as tk
