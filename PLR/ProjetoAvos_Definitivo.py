@@ -1,6 +1,6 @@
 # Retirar a aba Geral e deixar para ler planilha única
 # Colocar opção para a pessoa escolher o ano ou considerar o cálculo dos avos para ano vingente usando algo como "TODAY"
-
+# No dia 28/07/2025 acredito que esse seja o código do executável: ProjetoAvos.exe
 
 
 import pandas as pd
